@@ -24,13 +24,19 @@ require 'optimist'
   save  = opts[:no_save]  ? false : true
   print = opts[:no_print] ? false : true
 
-
   if ARGV.empty?
+
     CTFC::Data.get! :eur, save: false, print: true
+
   else
-    @data = CTFC::Data.new( :eur, save: save, print: print, coins: opts.coins )
+
     ARGV.each do |fiat|
+
       next if opts.include? fiat.to_s.downcase
-      @data.get(fiat)
+
+      CTFC::Data.get!(fiat,
+                      save: save,
+                      print: print,
+                      coins: opts.coins) unless opts.include? fiat.downcase
     end
   end
