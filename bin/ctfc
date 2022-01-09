@@ -32,8 +32,6 @@ require 'optimist'
 
     ARGV.each do |fiat|
 
-      next if opts.include? fiat.to_s.downcase
-
       CTFC::Data.get!(fiat,
                       save: save,
                       print: print,
