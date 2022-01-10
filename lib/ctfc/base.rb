@@ -12,21 +12,21 @@ module CTFC
 
 
     def initialize( currency = :eur, opts = {} )
+      @fiat  = currency.to_s.upcase
       @save  = opts[:save].nil?  ? true : opts[:save]
       @print = opts[:print].nil? ? true : opts[:print]
       @coins = opts[:coins].nil? ? COINS : Array(opts[:coins])
-      @currency = currency.to_s.upcase
     end
 
 
     def get( currency = nil, opts = {} )
-      @currency = currency if currency
+      @fiat = currency if currency
 
       @coins = opts[:coins] unless opts[:coins].nil?
       @save  = opts[:save]  unless opts[:save].nil?
       @print = opts[:print] unless opts[:print].nil?
 
-      @table = 'crypto_' + @currency.to_s.downcase + '_rates.csv'
+      @table = 'crypto_' + @fiat.to_s.downcase + '_rates.csv'
       @count = 0
 
       do_rest_request
@@ -65,7 +65,7 @@ module CTFC
       @prices, @data_array, coin_uri = {}, [], ''
 
       @coins.collect { |coin| coin_uri << "fsyms=#{coin}&" }
-      @url = URL + "#{coin_uri}tsyms=#{@currency}"
+      @url = URL + "#{coin_uri}tsyms=#{@fiat}"
 
       @response = RestClient.get @url
       @data = JSON.parse @response
@@ -73,21 +73,23 @@ module CTFC
       @data_array << Time.now.to_s
 
       @coins.each do |coin|
-        @data_array << value = @data["RAW"][coin.to_s.upcase][@currency.to_s.upcase]["PRICE"].round(2)
+        @data_array << value = @data["RAW"][coin.to_s.upcase][@fiat.to_s.upcase]["PRICE"].round(2)
         @prices[coin] = value
       end
 
       print_fiat_values if print?
       save_csv_data if save?
 
-     rescue
+      return @prices
 
+     rescue
       @count += 1
-      if @count >= MAX_RETRY
-        puts @response.to_s.split(',')
-        exit 1
+
+      unless @count >= MAX_RETRY
+        do_rest_request 
       else
-        do_rest_request
+        puts @response.to_s.split(',')
+        exit(1)
       end
     end
 
@@ -95,7 +97,7 @@ module CTFC
     def print_fiat_values
       30.times { print '='.green }; puts
 
-      puts "[".green + @currency.to_s.upcase.yellow.bold + "]".green + " conversion rate"
+      puts "[".green + @fiat.to_s.upcase.yellow.bold + "]".green + " conversion rate"
       30.times { print '='.green }; puts
 
       @prices.each do |name, value|
