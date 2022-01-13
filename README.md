@@ -47,8 +47,8 @@ ruby bin/ctfc eur usd rsd
 
  @return:  
   print EUR, USD, RSD rates for default coins 
-  save data in '.csv' table with pattern: 'crypto_CURRENCY_rates.csv'
-   -> './crypto_eur.rates.csv', './crypto_usd_rates.csv', './crypto_rsd_rates.csv'
+  save data in '.csv' table with pattern: 'crypto_CURRENCY.csv'
+   -> './crypto_eur.csv', './crypto_usd.csv', './crypto_rsd.csv'
 ```
 
  3 - Use `--no-save` and/or `--no-print`  
@@ -107,7 +107,7 @@ class Crypto < Ctfc; end
     
   @data.table
    @return '.csv' table name
-    => 'crypto_eur_rates.csv'
+    => 'ctfc_eur.csv'
     
   @data.coins
    @return coins for scrap, also allow setter method @data.coins = [...]
@@ -131,7 +131,7 @@ class Crypto < Ctfc; end
  Ctfc.rsd( save: false )
 
 
-# Also class Crypto < Crypto, as alias class
+# Also class Crypto < Ctfc, as alias
 
  Crypto.to_eur coins: %w[btc xmr ltc]
 ```  
