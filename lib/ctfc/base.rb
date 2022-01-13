@@ -1,6 +1,11 @@
 require_relative 'config'
 require_relative 'version'
 
+require 'json'
+require 'csv'
+require 'colorize'
+require 'rest-client'
+
 module CTFC
   
   class Data
@@ -9,6 +14,13 @@ module CTFC
 
     attr_reader   :response, :data, :url, :table, :count, :prices
     attr_accessor :fiat, :coins
+
+    alias :currency :fiat
+
+
+    def self.get!( currency = :eur, opts = {} )
+      new(currency, opts).get
+    end
 
 
     def initialize( currency = :eur, opts = {} )
@@ -19,16 +31,12 @@ module CTFC
     end
 
 
-    def get( currency = nil, opts = {} )
-      @fiat = currency if currency
-
-      @coins = opts[:coins] unless opts[:coins].nil?
-      @save  = opts[:save]  unless opts[:save].nil?
-      @print = opts[:print] unless opts[:print].nil?
-
-      @table = 'crypto_' + @fiat.to_s.downcase + '_rates.csv'
-      @count = 0
-
+    def get( c = nil, opts = {} )
+      @fiat  = c.to_s.upcase unless c.nil?
+      @coins = opts[:coins]  unless opts[:coins].nil?
+      @save  = opts[:save]   unless opts[:save].nil?
+      @print = opts[:print]  unless opts[:print].nil?
+      @count, @table = 0, "ctfc_#{@fiat}.csv".downcase
       do_rest_request
     end
 
@@ -49,12 +57,12 @@ module CTFC
 
 
     def save=(opt)
-      @save = opt
+      @save = opt.is_a?(TrueClass) ? true : false
     end
 
 
     def print=(opt)
-      @print = opt
+      @print = opt.is_a?(TrueClass) ? true : false
     end
 
 
@@ -91,7 +99,7 @@ module CTFC
         puts @response.to_s.split(',')
         exit(1)
       end
-    end
+    end  # end of do_rest_request
 
 
     def print_fiat_values

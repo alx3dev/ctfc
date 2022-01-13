@@ -1,17 +1,31 @@
 require_relative 'ctfc/base'
 
-require 'json'
-require 'csv'
-require 'colorize'
-require 'rest-client'
+class Ctfc < CTFC::Data
 
-module CTFC
+  class << self
 
-  class Data
-
-    def self.get!( currency = :eur, opts = {} )
-      self.new(currency, opts).get
+    def to_rsd( opts = {} )
+      new(:rsd, opts).get
     end
+
+    alias :rsd :to_rsd
+
+
+    def to_eur( opts = {} )
+      new(:eur, opts).get
+    end
+
+    alias :eur :to_eur
+
+
+    def to_usd( opts = {} )
+      new(:usd, opts).get 
+    end
+
+    alias :usd :to_usd
 
   end
 end
+
+
+class Crypto < Ctfc; end

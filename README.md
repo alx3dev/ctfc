@@ -71,11 +71,22 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
   
 # Developer Examples
 
+Update from Version-0.2.0
+
+```ruby
+# This two classes extend CTFC::Data, so you can use all methods, with some shortcuts
+
+class Ctfc < CTFC::Data; end
+
+class Crypto < Ctfc; end
+```  
+
 ```ruby
 # define coins to scrap
   COINS = %w[ BTC XMR LTC ETH ]
 
 # initialize Data class  
+  # DEPRECEATED - use Ctfc.new instead
   @data = CTFC::Data.new :eur, save: false, print: false, coins: COINS  
    @return CTFC::Data object with data to perform request
     => #<CTFC::Data:0x000055715a6ce898 @coins=["BTC", "LTC", "XMR", "ETH", "BCH", "ZEC"], @currency="EUR", @print=true, @save=false>
@@ -109,7 +120,21 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
   
   TO BE CONTINIUED ...
 ```    
-  
+
+**Class methods added in Version-0.2.0**
+
+```ruby
+# class Ctfc < CTFC::Data has been added, with class methods for RSD, EUR, USD
+
+ Ctfc.to_rsd( print: false )
+# or alias method
+ Ctfc.rsd( save: false )
+
+
+# Also class Crypto < Crypto, as alias class
+
+ Crypto.to_eur coins: %w[btc xmr ltc]
+```  
   
 # TO-DO:
 Write documentation, examples and use-cases as gem dependency
