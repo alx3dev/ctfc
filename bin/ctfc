@@ -26,7 +26,7 @@ require 'optimist'
 
   if ARGV.empty?
 
-    Crypto.to_eur save: false, print: true
+    Crypto.to :eur, save: false, print: true
 
   else
 
