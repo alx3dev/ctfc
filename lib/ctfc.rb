@@ -2,30 +2,29 @@ require_relative 'ctfc/base'
 
 class Ctfc < CTFC::Data
 
+  ##
+  # @todo Allow Ctfc to use proxy and/or tor
+  #
   class << self
 
-    def to_rsd( opts = {} )
-      new(:rsd, opts).get
+    ##
+    # @example Get EUR data for BTC, XMR, LTC, ETH, print but don't save output
+    #
+    #   Ctfc.to :eur, save: false, coins: %w[BTC XMR LTC ETH]
+    #
+    # @param [Symbol] currency **Required**. Define fiat currency.
+    # @param [Hash] opts **Optional**. Additional options hash.
+    #
+    # @option [Boolean] print **Optional**. Print terminal output.
+    # @option [Boolean] save **Optional**. Save `.csv` output.
+    # @option [Array] coins **Optional**. Define coins to scrap.
+    #
+    # @return [Hash] CTFC::Data#prices || CTFC::Data#response
+    #
+    def to( currency, opts = {} )
+      new(currency.to_sym, opts).get
     end
-
-    alias :rsd :to_rsd
-
-
-    def to_eur( opts = {} )
-      new(:eur, opts).get
-    end
-
-    alias :eur :to_eur
-
-
-    def to_usd( opts = {} )
-      new(:usd, opts).get 
-    end
-
-    alias :usd :to_usd
-
   end
 end
-
 
 class Crypto < Ctfc; end
