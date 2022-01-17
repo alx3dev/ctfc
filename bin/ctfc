@@ -32,9 +32,9 @@ require 'optimist'
 
     ARGV.each do |fiat|
 
-      Ctfc.get!(fiat,
-                save: save,
-                print: print,
-                coins: opts.coins) unless opts.include? fiat.downcase
+      Ctfc.to(fiat,
+              save: save,
+              print: print,
+              coins: opts.coins) unless opts.include? fiat.downcase
     end
   end

@@ -10,7 +10,10 @@ module CTFC
 
   ##
   # Data class keep all the logic to send request, receive response,
-  #   and everything between.
+  # and everything between. Class Ctfc extend CTFC::Data, for easier work.
+  #
+  # @note Instead of using CTFC::Data.new, recommended way is to call Ctfc.new
+  #
   class Data
 
     include CTFC::CONFIG
@@ -20,11 +23,6 @@ module CTFC
 
     alias :currency :fiat
 
-
-    def self.get!( currency = :eur, opts = {} )
-      new(currency, opts).get
-    end
-
     ##
     # @example Initialization example
     #
@@ -33,11 +31,11 @@ module CTFC
     # @param [Symbol] currency **Optional**. Define fiat currency.
     # @param [Hash] opts **Optional**. Additional options hash.
     #
-    # @option [Boolean] print **Optional**. Print terminal output.
-    # @option [Boolean] save **Optional**. Save `.csv` output.
-    # @option [Array] coins **Optional**. Define coins to scrap.
+    # @option opts [Boolean] print **Optional**. Print terminal output.
+    # @option opts [Boolean] save **Optional**. Save `.csv` output.
+    # @option opts [Array] coins **Optional**. Define coins to scrap.
     #
-    # @return [Hash] Data#prices || Data#response
+    # @return [Object] Data object to work with
     #
     def initialize( currency = :eur, opts = {} )
       @fiat  = currency.to_s.upcase
@@ -65,11 +63,13 @@ module CTFC
     end
 
     ##
-    # Get fiat value for crypto
+    # Get fiat value from response hash with crypto prices
     #
     # @example
     #
     #   @data.price(:btc)
+    #
+    # @return [Float]
     #
     def price( coin )
       @prices[coin.to_s.upcase]
@@ -78,6 +78,8 @@ module CTFC
     ##
     # Check if crypto prices will be saved in `.csv` table
     #
+    # @return [true || false]
+    #
     def save?
       @save == true
     end
@@ -85,24 +87,18 @@ module CTFC
     ##
     # Check if crypto prices will be printed in terminal
     #
+    # @return [true || false]
+    #
     def print?
       @print == true
     end
 
-    ##
-    # @param [Boolean] save **Required**. Save csv output after request.
-    #
-    # @return [true || false]
-    #
+
     def save=(opt)
       @save = opt.is_a?(TrueClass) ? true : false
     end
 
-    ##
-    # @param [Boolean] print **Required**. Save csv output after request.
-    #
-    # @return [true || false]
-    #
+
     def print=(opt)
       @print = opt.is_a?(TrueClass) ? true : false
     end

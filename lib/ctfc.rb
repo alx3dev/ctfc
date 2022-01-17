@@ -15,9 +15,9 @@ class Ctfc < CTFC::Data
     # @param [Symbol] currency **Required**. Define fiat currency.
     # @param [Hash] opts **Optional**. Additional options hash.
     #
-    # @option [Boolean] print **Optional**. Print terminal output.
-    # @option [Boolean] save **Optional**. Save `.csv` output.
-    # @option [Array] coins **Optional**. Define coins to scrap.
+    # @option opts [Boolean] print **Optional**. Print terminal output.
+    # @option opts [Boolean] save **Optional**. Save `.csv` output.
+    # @option opts [Array] coins **Optional**. Define coins to scrap.
     #
     # @return [Hash] CTFC::Data#prices || CTFC::Data#response
     #

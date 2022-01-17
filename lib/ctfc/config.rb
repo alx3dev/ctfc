@@ -2,7 +2,7 @@ module CTFC
 
   ##
   # Keep default configuration data, like coins to scrap, max number
-  #   of retries and cryptocompare API url.
+  # of retries and cryptocompare API url.
   #
   module CONFIG
 
