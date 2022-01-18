@@ -1,40 +1,30 @@
-#!/usr/bin/env ruby
-# frozen_string_literal: true
+require_relative 'ctfc/base'
 
-require_relative '../lib/ctfc'
-require 'optimist'
+class Ctfc < CTFC::Data
 
-  opts = Optimist.options do
+  ##
+  # @todo Allow Ctfc to use proxy and/or tor
+  #
+  class << self
 
-    version "Software Version: #{CTFC::VERSION}"
-
-    banner ""
-    banner " Enter fiat currencies with/out additional arguments:"
-    banner ""
-    banner "  ruby bin/ctfc eur"
-    banner "  ruby bin/ctfc eur usd --no-save --coins btc xmr ltc"
-    banner ""
-
-    opt :coins,    "Set crypto coins",   default: CTFC::CONFIG::COINS
-    opt :no_save,  "Do not save '.csv' output"
-    opt :no_print, "Do not print terminal output"
-  end
-
-
-  save  = opts[:no_save]  ? false : true
-  print = opts[:no_print] ? false : true
-
-  if ARGV.empty?
-
-    Crypto.to :eur, save: false, print: true
-
-  else
-
-    ARGV.each do |fiat|
-
-      Ctfc.to(fiat,
-              save: save,
-              print: print,
-              coins: opts.coins) unless opts.include? fiat.downcase
+    ##
+    # @example Get EUR data for BTC, XMR, LTC, ETH, print but don't save output
+    #
+    #   Ctfc.to :eur, save: false, coins: %w[BTC XMR LTC ETH]
+    #
+    # @param [Symbol] currency **Required**. Define fiat currency.
+    # @param [Hash] opts **Optional**. Additional options hash.
+    #
+    # @option opts [Boolean] print **Optional**. Print terminal output.
+    # @option opts [Boolean] save **Optional**. Save `.csv` output.
+    # @option opts [Array] coins **Optional**. Define coins to scrap.
+    #
+    # @return [Hash] CTFC::Data#prices || CTFC::Data#response
+    #
+    def to( currency, opts = {} )
+      new(currency.to_sym, opts).get
     end
   end
+end
+
+class Crypto < Ctfc; end
