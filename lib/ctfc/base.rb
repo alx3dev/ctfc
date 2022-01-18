@@ -93,14 +93,32 @@ module CTFC
       @print == true
     end
 
-
+    ##
+    # Change option to save '.csv' table with prices
+    #
+    # @return [true || false]
+    #
     def save=(opt)
       @save = opt.is_a?(TrueClass) ? true : false
     end
 
-
+    ##
+    # Change option to print prices in terminal
+    #
+    # @return [true || false]
+    #
     def print=(opt)
       @print = opt.is_a?(TrueClass) ? true : false
+    end
+
+    ##
+    # Check if request was successful or not.
+    #
+    # @return [true || false]
+    #
+    def success?
+      return false if @response.nil?
+      @response.code == 200 ? true : false
     end
 
 
@@ -108,6 +126,7 @@ module CTFC
 
 
     def do_rest_request
+
       @prices, @data_array, coin_uri = {}, [], ''
 
       @coins.collect { |coin| coin_uri << "fsyms=#{coin}&" }
@@ -135,7 +154,6 @@ module CTFC
         do_rest_request 
       else
         puts @response.to_s.split(',')
-        exit(1)
       end
     end  # end of do_rest_request
 

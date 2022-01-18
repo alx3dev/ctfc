@@ -16,7 +16,7 @@ Make sure you have ruby and git installed:
 # How to run
 
 ```bash
-ruby bin/ctfc fiat_1, fiat_2, fiat_3
+ruby bin/ctfc fiat_1 fiat_2 fiat_3
 ```
 
 This command also accept multiple arguments:
@@ -71,15 +71,6 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
   
 # Developer Examples
 
-Update from Version-0.2.0
-
-```ruby
-# This two classes extend CTFC::Data, so you can use all methods, with some shortcuts
-
-class Ctfc < CTFC::Data; end
-
-class Crypto < Ctfc; end
-```  
 
 ```ruby
 # define coins to scrap
@@ -121,19 +112,21 @@ class Crypto < Ctfc; end
   TO BE CONTINIUED ...
 ```    
 
-**Class methods added in Version-0.2.0**
+**Class methods added in Version-0.2.1**
 
 ```ruby
-# class Ctfc < CTFC::Data has been added, with class methods for RSD, EUR, USD
+# Ctfc class extend CTFC::Data, for easier work:
 
- Ctfc.to_rsd( print: false )
-# or alias method
- Ctfc.rsd( save: false )
+  prices = Ctfc.new :eur, print: false
 
+# Class method `#to` was added as shortcut:
 
-# Also class Crypto < Ctfc, as alias
+ Ctfc.to :rsd, save: false
 
- Crypto.to_eur coins: %w[btc xmr ltc]
+# For those who don't like name `Ctfc`, you can use `Crypto` too:
+
+ prices = Crypto.to :eur, coins: %w[BTC XMR]
+
 ```  
   
 # TO-DO:
