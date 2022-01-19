@@ -7,7 +7,6 @@ require 'colorize'
 require 'rest-client'
 
 module CTFC
-
   ##
   # Data class keep all the logic to send request, receive response,
   # and everything between. Class Ctfc extend CTFC::Data, for easier work.
@@ -15,13 +14,12 @@ module CTFC
   # @note Instead of using CTFC::Data.new, recommended way is to call Ctfc.new
   #
   class Data
-
-    include CTFC::CONFIG
+    include CONFIG
 
     attr_reader   :response, :data, :url, :table, :count, :prices
     attr_accessor :fiat, :coins
 
-    alias :currency :fiat
+    alias currency fiat
 
     ##
     # @example Initialization example
@@ -37,7 +35,7 @@ module CTFC
     #
     # @return [Object] Data object to work with
     #
-    def initialize( currency = :eur, opts = {} )
+    def initialize(currency = :eur, opts = {})
       @fiat  = currency.to_s.upcase
       @save  = opts[:save].nil?  ? true : opts[:save]
       @print = opts[:print].nil? ? true : opts[:print]
@@ -53,12 +51,16 @@ module CTFC
     #
     #   @data.get :usd, save: false, coins: %w[BTC XMR ETH]
     #
-    def get( c = nil, opts = {} )
-      @fiat  = c.to_s.upcase unless c.nil?
+    # @param [Symbol || String] currency **Optional**. Change fiat currency and execute request.
+    # @param [Hash] opts **Optional**. Options hash to change config 'on-the-fly' - see #initialize.
+    #
+    def get(currency = nil, opts = {})
+      @fiat  = currency.to_s.upcase unless currency.nil?
       @coins = opts[:coins]  unless opts[:coins].nil?
       @save  = opts[:save]   unless opts[:save].nil?
       @print = opts[:print]  unless opts[:print].nil?
-      @count, @table = 0, "ctfc_#{@fiat}.csv".downcase
+      @count = 0
+      @table = "ctfc_#{@fiat}.csv".downcase
       do_rest_request
     end
 
@@ -69,9 +71,10 @@ module CTFC
     #
     #   @data.price(:btc)
     #
+    # @param [Symbol || String] coin **Required**. Coin name as symbol or string.
     # @return [Float]
     #
-    def price( coin )
+    def price(coin)
       @prices[coin.to_s.upcase]
     end
 
@@ -118,70 +121,73 @@ module CTFC
     #
     def success?
       return false if @response.nil?
-      @response.code == 200 ? true : false
-    end
 
+      @response.code == 200
+    end
 
     private
 
-
     def do_rest_request
+      prepare_uri
+      process_data
+      @prices
+    rescue StandardError
+      @count += 1
 
-      @prices, @data_array, coin_uri = {}, [], ''
+      if @count >= MAX_RETRY
+        puts @response.to_s.split(',')
+      else
+        do_rest_request
+      end
+    end
 
-      @coins.collect { |coin| coin_uri << "fsyms=#{coin}&" }
-      @url = URL + "#{coin_uri}tsyms=#{@fiat}"
-
+    def process_data
       @response = RestClient.get @url
       @data = JSON.parse @response
 
       @data_array << Time.now.to_s
-
       @coins.each do |coin|
-        @data_array << value = @data["RAW"][coin.to_s.upcase][@fiat.to_s.upcase]["PRICE"].round(2)
+        @data_array << value = @data['RAW'][coin.to_s.upcase][@fiat.to_s.upcase]['PRICE'].round(2)
         @prices[coin] = value
       end
 
-      print_fiat_values if print?
-      save_csv_data if save?
+      print_fiat_values
+      save_csv_data
+    end
 
-      return @prices
-
-     rescue
-      @count += 1
-
-      unless @count >= MAX_RETRY
-        do_rest_request 
-      else
-        puts @response.to_s.split(',')
-      end
-    end  # end of do_rest_request
-
+    def prepare_uri
+      @prices = {}
+      @data_array = []
+      coin_uri = ''
+      @coins.collect { |coin| coin_uri << "fsyms=#{coin}&" }
+      @url = URL + "#{coin_uri}tsyms=#{@fiat}"
+    end
 
     def print_fiat_values
-      30.times { print '='.green }; puts
+      return unless print?
 
-      puts "[".green + @fiat.to_s.upcase.yellow.bold + "]".green + " conversion rate"
-      30.times { print '='.green }; puts
-
+      30.times { print '='.green }
+      puts ''
+      puts "#{'['.green}#{@fiat.to_s.upcase.yellow.bold}#{']'.green} conversion rate"
+      30.times { print '='.green }
+      puts ''
       @prices.each do |name, value|
-        print "[".yellow.bold + "#{name}".green.bold + "]".yellow.bold
+        print '['.yellow.bold + name.to_s.green.bold + ']'.yellow.bold
         puts ": #{value}".bold
       end
     end
-  
 
     def save_csv_data
+      return unless save?
+
       create_csv_headers unless File.exist?(@table)
       CSV.open(@table, 'ab') { |column| column << @data_array }
     end
 
-
     def create_csv_headers
       header_array = ['TIME']
       @coins.each { |coin| header_array << coin }
-      CSV.open(@table, "w" ) { |header| header << header_array }
+      CSV.open(@table, 'w') { |header| header << header_array }
     end
-
   end
 end
