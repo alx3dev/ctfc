@@ -12,10 +12,10 @@ require_relative '../lib/ctfc'
 #
 class Fiat
   def initialize
-    currency = self.class.name == 'Fiat' ? 'EUR' : self.class.name
+    currency = instance_of?(Fiat) ? 'EUR' : self.class.name
 
     Crypto.to(currency,
-              save:  true,
+              save: true,
               print: false,
               coins: %w[BTC XMR ETH])
   end
