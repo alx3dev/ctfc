@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'config'
 require_relative 'version'
 
@@ -147,8 +149,9 @@ module CTFC
 
       @data_array << Time.now.to_s
       @coins.each do |coin|
-        @data_array << value = @data['RAW'][coin.to_s.upcase][@fiat.to_s.upcase]['PRICE'].round(2)
+        value = @data['RAW'][coin.to_s.upcase][@fiat.to_s.upcase]['PRICE'].round(2)
         @prices[coin] = value
+        @data_array << value
       end
 
       print_fiat_values
@@ -156,9 +159,9 @@ module CTFC
     end
 
     def prepare_uri
-      @prices = {}
-      @data_array = []
-      coin_uri = ''
+      @prices = Hash.new {}
+      @data_array = Array.new []
+      coin_uri = String.new ''
       @coins.collect { |coin| coin_uri << "fsyms=#{coin}&" }
       @url = URL + "#{coin_uri}tsyms=#{@fiat}"
     end
