@@ -1,8 +1,9 @@
 #/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'pry'
 require 'bundler/setup'
-require "irb"
+
 require_relative '../lib/ctfc'
 
-IRB.start(__FILE__)
+Pry.start

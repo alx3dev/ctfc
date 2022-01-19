@@ -16,13 +16,14 @@ end
 ##
 # Get prices for EUR, USD and RSD with different configuration
 #
-@eur = Ctfc.new :eur, coins: %w[BTC XMR]
-@usd = Ctfc.new :usd, print: false, coins: %w[BTC XMR]
-@rsd = Ctfc.new :rsd, save: false, %w[LTC ETH]
-
-loop do
-  @eur.get
-  @usd.get
-  @rsd.get
-  sleep 300
-end
+#  @eur = Ctfc.new :eur, coins: %w[BTC XMR]
+#  @usd = Ctfc.new :usd, print: false, coins: %w[BTC XMR]
+#  @rsd = Ctfc.new :rsd, save: false, %w[LTC ETH]
+#
+#  loop do
+#    @eur.get
+#    @usd.get
+#    @rsd.get
+#    sleep 300
+#  end
+#

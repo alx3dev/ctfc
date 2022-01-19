@@ -30,7 +30,7 @@ class GBP < Fiat; end
 # check if arguments contain any of defined currencies
 ARGV.select do |arg|
   case arg
-  when 'usd', 'USD', nil then USD.new
+  when 'usd', 'USD' then USD.new
   when 'rsd', 'RSD' then RSD.new
   when 'eur', 'EUR' then EUR.new
   when 'gbp', 'GBP' then GBP.new
