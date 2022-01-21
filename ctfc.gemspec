@@ -6,9 +6,7 @@ Gem::Specification.new do |s|
   s.name        = 'ctfc'
   s.version     = CTFC::VERSION
   s.summary     = 'Crypto to Fiat currency data gathering'
-  s.description = <<~DESC
-    Convert any crypto to fiat currency, gather all data and/or save in `.csv` table.
-  DESC
+  s.description = 'Convert any crypto to fiat currency and/or save in csv table.'
 
   s.license = 'MIT'
   s.authors = 'alx3dev'

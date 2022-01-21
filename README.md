@@ -6,13 +6,19 @@ For now only prices are printed/saved, while all data remain easily accessible f
   
 # How to install
 
-Make sure you have ruby and git installed:
+Make sure you have ruby and git installed  
 
+Install from source:
 ```bash
  git clone https://github.com/alx3dev/ctfc.git
  cd ctfc && bundle install
 ```  
-  
+
+Install from rubygems:
+
+```bash
+gem install ctfc
+```
 # How to run
 
 ```bash
@@ -73,53 +79,70 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
 
 
 ```ruby
-# define coins to scrap
+  # define coins to scrap
   COINS = %w[ BTC XMR LTC ETH ]
 
-# initialize Data class  
-  # DEPRECEATED - use Ctfc.new instead
-  @data = CTFC::Data.new :eur, save: false, print: false, coins: COINS  
-   @return CTFC::Data object with data to perform request
-    => #<CTFC::Data:0x000055715a6ce898 @coins=["BTC", "LTC", "XMR", "ETH", "BCH", "ZEC"], @currency="EUR", @print=true, @save=false>
+  # initialize Data class  
+  @data = Ctfc.new :eur, save: false, print: false, coins: COINS
+    => return Ctfc object to work with
+    => #<Ctfc:0x000055b5c8b61a38 @coins=["BTC", "LTC", "XMR", "ETH", "BCH", "ZEC"], @fiat="EUR", @print=true, @save=true>
  
-# execute request
+  # execute request
   @data.get
-   @return Hash with upcase string coins as keys, and float prices
+    => return Hash with upcase string coins as keys, and float prices
     => {"BTC"=>36760.11, "XMR"=>169.55, "LTC"=>114.4, "ETH"=>2746.22}
   
-# now you can use ::Data instance methods
+  # now you can use ::Data instance methods
   @data.response
-   @return RestClient response to cryptocomare API
+    => return RestClient response to cryptocomare API
     => <RestClient::Response 200 "{\"RAW\":{\"BT...">
-   
+  
+  # check request url 
   @data.url
-   @return Cryptocompare API url
+    => return Cryptocompare API url
     => "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC&fsyms=LTC&fsyms=XMR&fsyms=ETH&fsyms=BCH&fsyms=ZEC&tsyms=EUR"
-    
+  
+  # name of csv table (saved in working directory)  
   @data.table
-   @return '.csv' table name
+    => return '.csv' table name
     => 'ctfc_eur.csv'
-    
+
+  # array of coins to work with
   @data.coins
-   @return coins for scrap, also allow setter method @data.coins = [...]
+    => return coins for scrap, also allow setter method @data.coins = [...]
     => ['BTC', 'XMR', 'LTC', 'ETH']
-    
+
+  # get all data about all coins (json api response)
   @data.data
-   @return all data returned by cryptocompare API
-    => ... ... ...
+    => return all data returned by cryptocompare API
+    => {"RAW"=>
+      {"BTC"=>
+        {"EUR"=>
+          {"TYPE"=>"5",
+           "MARKET"=>"CCCAGG",
+           "FROMSYMBOL"=>"BTC",
+           "TOSYMBOL"=>"EUR",
+           "FLAGS"=>"2049",
+           "PRICE"=>33851.17,
+           "LASTUPDATE"=>1642773847,
+           "MEDIAN"=>33853.8,
+           "LASTVOLUME"=>0.1,
+           "LASTVOLUMETO"=>3384.3676,
+           "LASTTRADEID"=>"2024043",
+           ... ... ... ... ... ... ...
     
   
   TO BE CONTINIUED ...
 ```    
 
-**Class methods added in Version-0.2.1**
+**Class methods as shortcuts:**
 
 ```ruby
-# Ctfc class extend CTFC::Data, for easier work:
+# get default coins in EUR, save output without printing
 
-  prices = Ctfc.new :eur, print: false
+  prices = Ctfc.to :eur, print: false
 
-# Class method `#to` was added as shortcut:
+# get default coins in RSD, print output, don't save
 
  Ctfc.to :rsd, save: false
 
@@ -130,4 +153,4 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
 ```  
   
 # TO-DO:
-Write documentation, examples and use-cases as gem dependency
+See **Projects**
