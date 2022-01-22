@@ -21,6 +21,8 @@ gem install ctfc
 ```
 # How to run
 
+  - Read documentation on: https://rubydoc.info/gems/ctfc/0.3.1/CTFC/Data  
+
 ```bash
 ruby bin/ctfc fiat_1 fiat_2 fiat_3
 ```
@@ -40,7 +42,7 @@ This command also accept multiple arguments:
  ```
  ruby bin/ctfc 
  
-  @return:  
+  return:  
    print EUR rates for default coins (BTC, LTC, XMR, ETH, BCH, ZEC)
    do not save '.csv' table 
  ```     
@@ -48,29 +50,29 @@ This command also accept multiple arguments:
      
  2 - Add fiat currencies as arguments  
 
-```
+```ruby
 ruby bin/ctfc eur usd rsd
 
- @return:  
-  print EUR, USD, RSD rates for default coins 
-  save data in '.csv' table with pattern: 'crypto_CURRENCY.csv'
-   -> './crypto_eur.csv', './crypto_usd.csv', './crypto_rsd.csv'
+ => return:  
+      print EUR, USD, RSD rates for default coins 
+      save data in '.csv' table with pattern: 'crypto_#{CURRENCY}.csv'
+      -> './crypto_eur.csv', './crypto_usd.csv', './crypto_rsd.csv'
 ```
 
  3 - Use `--no-save` and/or `--no-print`  
  
-```
+```ruby
 ruby bin/ctfc eur --no-print --coins btc xmr ltc
  
- @return:
-  save EUR rates for BTC, XMR and LTC
-  do not print output  
+ => return:
+      save EUR rates for BTC, XMR and LTC
+      do not print output  
   
   
 ruby bin/ctfc rsd --no-save --coins btc xmr
 
- @return:
-  print RSD rates for BTC and XMR
+ => return:
+      print RSD rates for BTC and XMR
   
 ```  
 
