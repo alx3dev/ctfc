@@ -18,7 +18,7 @@ Install from rubygems:
 gem install ctfc
 ```
 # How to run
-  - **Read documentation on:** https://rubydoc.info/gems/ctfc/0.3.1/CTFC/Data  
+  - **Read documentation on:** https://rubydoc.info/gems/ctfc/0.3.3/CTFC/Data  
 
 ```bash
 ruby bin/ctfc fiat_1 fiat_2 fiat_3
@@ -38,9 +38,9 @@ This command also accept multiple arguments:
  ```ruby
  ruby bin/ctfc 
  
-  return:  
-   print EUR rates for default coins (BTC, LTC, XMR, ETH, BCH, ZEC)
-   do not save '.csv' table 
+ => return:  
+      print EUR rates for default coins (BTC, LTC, XMR, ETH, BCH, ZEC)
+      do not save '.csv' table 
  ```     
      
      
@@ -81,37 +81,37 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
   # initialize Data class  
   @data = Ctfc.new :eur, save: false, print: false, coins: COINS
     => return Ctfc object to work with
-    => #<Ctfc:0x000055b5c8b61a38 @coins=["BTC", "LTC", "XMR", "ETH", "BCH", "ZEC"], @fiat="EUR", @print=true, @save=true>
+    -> #<Ctfc:0x000055b5c8b61a38 @coins=["BTC", "LTC", "XMR", "ETH", "BCH", "ZEC"], @fiat="EUR", @print=true, @save=true>
  
   # execute request
   @data.get
     => return Hash with upcase string coins as keys, and float prices
-    => {"BTC"=>36760.11, "XMR"=>169.55, "LTC"=>114.4, "ETH"=>2746.22}
+    -> {"BTC"=>36760.11, "XMR"=>169.55, "LTC"=>114.4, "ETH"=>2746.22}
   
   # now you can use ::Data instance methods
   @data.response
     => return RestClient response to cryptocomare API
-    => <RestClient::Response 200 "{\"RAW\":{\"BT...">
+    -> <RestClient::Response 200 "{\"RAW\":{\"BT...">
   
   # check request url 
   @data.url
     => return Cryptocompare API url
-    => "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC&fsyms=LTC&fsyms=XMR&fsyms=ETH&fsyms=BCH&fsyms=ZEC&tsyms=EUR"
+    -> "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC&fsyms=LTC&fsyms=XMR&fsyms=ETH&fsyms=BCH&fsyms=ZEC&tsyms=EUR"
   
   # name of csv table (saved in working directory)  
   @data.table
     => return '.csv' table name
-    => 'ctfc_eur.csv'
+    -> 'ctfc_eur.csv'
 
   # array of coins to work with
   @data.coins
     => return coins for scrap, also allow setter method @data.coins = [...]
-    => ['BTC', 'XMR', 'LTC', 'ETH']
+    -> ['BTC', 'XMR', 'LTC', 'ETH']
 
   # get all data about all coins (json api response)
   @data.data
     => return all data returned by cryptocompare API
-    => {"RAW"=>
+    -> {"RAW"=>
       {"BTC"=>
         {"EUR"=>
           {"TYPE"=>"5",
