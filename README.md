@@ -1,11 +1,9 @@
 # About
-
 Convert any crypto to fiat currency, gather all data and/or save in `.csv` table.  
 For now only prices are printed/saved, while all data remain easily accessible from variable (for developers).  
   
   
 # How to install
-
 Make sure you have ruby and git installed  
 
 Install from source:
@@ -20,8 +18,7 @@ Install from rubygems:
 gem install ctfc
 ```
 # How to run
-
-  - Read documentation on: https://rubydoc.info/gems/ctfc/0.3.1/CTFC/Data  
+  - **Read documentation on:** https://rubydoc.info/gems/ctfc/0.3.1/CTFC/Data  
 
 ```bash
 ruby bin/ctfc fiat_1 fiat_2 fiat_3
@@ -36,10 +33,9 @@ This command also accept multiple arguments:
   
   
 # Script Examples
-
  1 - Run script without arguments (default options)  
  
- ```
+ ```ruby
  ruby bin/ctfc 
  
   return:  
@@ -78,8 +74,6 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
 
   
 # Developer Examples
-
-
 ```ruby
   # define coins to scrap
   COINS = %w[ BTC XMR LTC ETH ]
@@ -141,18 +135,24 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
 
 ```ruby
 # get default coins in EUR, save output without printing
-
   prices = Ctfc.to :eur, print: false
 
 # get default coins in RSD, print output, don't save
-
- Ctfc.to :rsd, save: false
-
+  Ctfc.to :rsd, save: false
+ 
 # For those who don't like name `Ctfc`, you can use `Crypto` too:
-
- prices = Crypto.to :eur, coins: %w[BTC XMR]
-
+  prices = Crypto.to :eur, coins: %w[BTC XMR]
 ```  
-  
-# TO-DO:
+
+# Contribution
+Any contribution is highly appreciated, as long as you follow Code of Conduct.
+
+ - Fork repository
+ - Make your changes
+ - Submit pull request  
+
+# License
+Don't be a dick - it's MIT.
+
+# To-Do:
 See **Projects**
