@@ -6,6 +6,8 @@ require_relative 'ctfc/base'
 # For easier job use Ctfc, instead of typing CTFC::Data.
 # You can define default coins with Ctfc::COINS=
 #
+# @note For instance methods look at CTFC::Data.
+#
 class Ctfc < CTFC::Data
   ##
   # @todo Allow Ctfc to use proxy and/or tor

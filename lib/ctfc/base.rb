@@ -104,7 +104,7 @@ module CTFC
     # @return [true || false]
     #
     def save=(opt)
-      @save = opt.is_a?(TrueClass) ? true : false
+      @save = opt.is_a?(TrueClass)
     end
 
     ##
@@ -113,7 +113,7 @@ module CTFC
     # @return [true || false]
     #
     def print=(opt)
-      @print = opt.is_a?(TrueClass) ? true : false
+      @print = opt.is_a?(TrueClass)
     end
 
     ##
@@ -159,8 +159,8 @@ module CTFC
     end
 
     def prepare_uri
-      @prices = Hash.new {}
-      @data_array = Array.new []
+      @prices = {}
+      @data_array = []
       coin_uri = String.new ''
       @coins.collect { |coin| coin_uri << "fsyms=#{coin}&" }
       @url = URL + "#{coin_uri}tsyms=#{@fiat}"
