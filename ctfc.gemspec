@@ -34,4 +34,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler', '~> 2.2.9'
   s.add_development_dependency 'pry', '~> 0.14.1'
   s.add_development_dependency 'rake', '~> 13.0.3'
+  s.add_development_dependency 'rspec', '~> 3.10.0'
 end
