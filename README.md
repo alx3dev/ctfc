@@ -144,11 +144,17 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
   prices = Crypto.to :eur, coins: %w[BTC XMR]
 ```  
 
+# Tests
+To run tests use `./check-syntax.sh`. This command will run rubocop for code inspection,
+but with some errors hidden by `.rubocop_todo.yml`. Using check-syntax script, all test should pass.
+
+
 # Contribution
 Any contribution is highly appreciated, as long as you follow Code of Conduct.
 
  - Fork repository
  - Make your changes
+ - Write tests
  - Submit pull request  
 
 # License
