@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/alx3dev/ctfc'
 
   s.bindir = 'bin'
-  s.require_paths = ['lib']
-  s.executables = ['ctfc']
+  s.require_paths = 'lib'
+  s.executables = 'ctfc'
 
   s.metadata['homepage_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['source_code_uri'] = 'https://github.com/alx3dev/ctfc'
@@ -22,8 +22,15 @@ Gem::Specification.new do |s|
   s.metadata['documentation_uri'] = "https://rubydoc.info/gems/#{s.name}/#{s.version}"
   s.metadata['rubygems_mfa_required'] = 'true'
 
-  s.files = ['bin/ctfc', 'bin/console', 'lib/ctfc.rb', 'LICENSE', 'README.md', 'ctfc.gemspec',
-             'lib/ctfc/config.rb', 'lib/ctfc/version.rb', 'lib/ctfc/base.rb']
+  s.files = %w[ bin/ctfc
+                bin/console
+                lib/ctfc.rb
+                lib/ctfc/version.rb
+                lib/ctfc/base.rb
+                lib/ctfc/config.rb
+                LICENSE
+                README.md
+                ctfc.gemspec]
 
   s.required_ruby_version = '>= 3.0.1'
 

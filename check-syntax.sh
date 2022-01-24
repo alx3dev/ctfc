@@ -9,8 +9,8 @@
 # To inspect all errors that should be fixed run:
 #   rubocop
 #
-# This will return all errors hidden by todo file. Errors should be fixed,
-# then manualy removed from .rubocop_todo.yml
+# This will return all errors hidden by todo file.  
+# Errors should be fixed, then manualy removed from .rubocop_todo.yml
 ##
 
 rubocop --format simple --config .rubocop_todo.yml
