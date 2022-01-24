@@ -5,8 +5,11 @@ require_relative './lib/ctfc/version'
 Gem::Specification.new do |s|
   s.name        = 'ctfc'
   s.version     = CTFC::VERSION
-  s.summary     = 'Crypto to Fiat currency data gathering'
-  s.description = 'Convert any crypto to fiat currency and/or save in csv table.'
+  s.summary     = 'Cryptocurrency to Fiat values, get data and save prices.'
+  s.description = <<~DESCRIPTION
+    Convert any cryptocurrency to any fiat value, export data to csv table.
+    Print colorized terminal output.
+  DESCRIPTION
 
   s.license = 'MIT'
   s.authors = 'alx3dev'
@@ -19,7 +22,7 @@ Gem::Specification.new do |s|
   s.metadata['homepage_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['source_code_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['bug_tracker_uri'] = 'https://github.com/alx3dev/ctfc/issues'
-  s.metadata['documentation_uri'] = "https://rubydoc.info/gems/#{s.name}/#{s.version}"
+  s.metadata['documentation_uri'] = "https://rubydoc.info/gems/#{s.name}"
   s.metadata['rubygems_mfa_required'] = 'true'
 
   s.files = %w[ bin/ctfc

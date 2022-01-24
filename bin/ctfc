@@ -5,7 +5,8 @@ require_relative '../lib/ctfc'
 require 'optimist'
 
 opts = Optimist.options do
-  version "Software Version: #{CTFC::VERSION}"
+  version "Crypto To Fiat Currency\n".cyan.bold \
+          + "Gem Version: #{CTFC::VERSION}"
 
   banner ''
   banner ' Enter fiat currencies with/out additional arguments:'
@@ -14,26 +15,42 @@ opts = Optimist.options do
   banner '  ruby bin/ctfc eur usd --no-save --coins btc xmr ltc'
   banner ''
 
-  opt :coins,    'Set crypto coins', default: CTFC::CONFIG::COINS
-  opt :no_save,  "Do not save '.csv' output"
-  opt :no_print, 'Do not print terminal output'
+  opt :coins,     'Set crypto coins', default: CTFC::CONFIG::COINS
+  opt :no_save,   "Do not save '.csv' output"
+  opt :no_print,  'Do not print terminal output'
+  opt :loop,      'Run script N times',           default: 1, type: :integer
+  opt :wait,      'Wait N seconds between loop',  default: 0, type: :integer
 end
 
 save  = opts[:no_save]  ? false : true
 print = opts[:no_print] ? false : true
 
+@crypto = Ctfc.new
+
 if ARGV.empty?
 
-  Crypto.to :eur, save: false, print: true
+  @crypto.get(:eur, save: false)
 
 else
 
-  ARGV.each do |fiat|
-    next if opts.include? fiat.downcase
+  opts[:loop].times do
+    ARGV.each do |fiat|
+      next if opts.include?(fiat.downcase)
 
-    Ctfc.to(fiat,
-            save: save,
-            print: print,
-            coins: opts.coins)
+      @crypto.get(fiat,
+                  save: save,
+                  print: print,
+                  coins: opts.coins)
+      sleep 1 # wait between requests
+    end
+
+    # end if no `--loop` arg
+    next unless opts[:loop] > 1
+
+    # pause between loops
+    sleep opts[:wait]
+
+    # clear screan - depending on OS
+    system 'clear' or system 'cls'
   end
 end

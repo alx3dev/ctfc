@@ -18,7 +18,7 @@ Install from rubygems:
 gem install ctfc
 ```
 # How to run
-  - **Read documentation on:** https://rubydoc.info/gems/ctfc/0.3.3/CTFC/Data  
+  - **Read documentation on:** https://rubydoc.info/gems/ctfc/CTFC/Data  
 
 ```bash
 ruby bin/ctfc fiat_1 fiat_2 fiat_3
@@ -26,22 +26,24 @@ ruby bin/ctfc fiat_1 fiat_2 fiat_3
 
 This command also accept multiple arguments:
 
- - `--no-save`  -  do not save `.csv.` output
- - `--no-print` -  do not print terminal output
- - `--coins`    -  coins to scrap (default: BTC, LTC, XMR, ETH, BCH, ZEC )
- - `--help`     -  help menu
+ - `--no-save`  - do not save `.csv.` output
+ - `--no-print` - do not print terminal output
+ - `--coins`    - coins to scrap (default: BTC, LTC, XMR, ETH, BCH, ZEC )
+ - `--loop`     - repeat script N times (default 1)
+ - `--wait`     - wait N seconds between loops (default 0)
+ - `--help`     - help menu
   
   
 # Script Examples
  1 - Run script without arguments (default options)  
  
- ```ruby
+```ruby
  ruby bin/ctfc 
  
  => return:  
       print EUR rates for default coins (BTC, LTC, XMR, ETH, BCH, ZEC)
       do not save '.csv' table 
- ```     
+```  
      
      
  2 - Add fiat currencies as arguments  
@@ -55,7 +57,7 @@ ruby bin/ctfc eur usd rsd
       -> './crypto_eur.csv', './crypto_usd.csv', './crypto_rsd.csv'
 ```
 
- 3 - Use `--no-save` and/or `--no-print`  
+ 3 - Use `--no-save`, `--no-print`, `--loop`, `--wait`
  
 ```ruby
 ruby bin/ctfc eur --no-print --coins btc xmr ltc
@@ -69,7 +71,13 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
 
  => return:
       print RSD rates for BTC and XMR
-  
+
+
+# added in version 0.4.0
+ruby bin/ctfc rsd --no-print --loop 1440 --wait 60
+
+ => return:
+      save RSD rates without print, run each minute for 24 hours
 ```  
 
   
@@ -145,8 +153,8 @@ ruby bin/ctfc rsd --no-save --coins btc xmr
 ```  
 
 # Tests
-To run tests use `./check-syntax.sh`. This command will run rubocop for code inspection,
-but with some errors hidden by `.rubocop_todo.yml`. Using check-syntax script, all test should pass.
+To run tests use `./check-syntax.sh`.  
+This command will run rubocop for code inspection, but with some errors hidden by `.rubocop_todo.yml`. Using check-syntax script, all test should pass.
 
 
 # Contribution

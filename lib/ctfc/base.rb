@@ -8,12 +8,20 @@ require 'csv'
 require 'colorize'
 require 'rest-client'
 
+##
+# Module **CTFC** keep everything together. **CTFC::CONFIG** module for default setup,
+# and **CTFC::Data** class for actual request execution. For instance methods look
+# at **CTFC::Data**, for class methods look at **Ctfc**.
+#
+# @see CTFC::Data
+# @see Ctfc
+#
 module CTFC
   ##
   # Data class keep all the logic to send request, receive response,
   # and everything between. Class Ctfc extend CTFC::Data, for easier work.
   #
-  # @note Instead of using CTFC::Data.new, recommended way is to call Ctfc.new
+  # @note Instead of using CTFC::Data.new, you can also call Ctfc.new
   #
   class Data
     include CONFIG
@@ -25,7 +33,6 @@ module CTFC
 
     ##
     # @example Initialization example
-    #
     #   @data = CTFC::Data.new :eur, save: true
     #
     # @param [Symbol] currency **Optional**. Define fiat currency.
@@ -35,7 +42,7 @@ module CTFC
     # @option opts [Boolean] save **Optional**. Save `.csv` output.
     # @option opts [Array] coins **Optional**. Define coins to scrap.
     #
-    # @return [Object] Data object to work with
+    # @return [Data] Data object to work with
     #
     def initialize(currency = :eur, opts = {})
       @fiat  = currency.to_s.upcase
@@ -45,16 +52,18 @@ module CTFC
     end
 
     ##
-    # @example Get fiat prices for previous config
+    # @example Get fiat prices for initialized config
     #
     #   @data.get
     #
-    # @example Get prices and change previous config "on-the-fly"
+    # @example Get prices and change initialized config "on-the-fly"
     #
     #   @data.get :usd, save: false, coins: %w[BTC XMR ETH]
     #
     # @param [Symbol || String] currency **Optional**. Change fiat currency and execute request.
     # @param [Hash] opts **Optional**. Options hash to change config 'on-the-fly' - see #initialize.
+    #
+    # @return [Hash || false] Hash of coins and fiat values, or false if all requests fail
     #
     def get(currency = nil, opts = {})
       @fiat  = currency.to_s.upcase unless currency.nil?
@@ -141,6 +150,7 @@ module CTFC
       else
         do_rest_request
       end
+      false
     end
 
     def process_data
