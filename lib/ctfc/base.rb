@@ -5,6 +5,7 @@ require_relative 'version'
 
 require 'json'
 require 'csv'
+require 'kolorit'
 require 'rest-client'
 
 ##
