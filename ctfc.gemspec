@@ -37,7 +37,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.0.1'
 
-  s.add_runtime_dependency 'colorize', '~> 0.8.1'
   s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
 

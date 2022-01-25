@@ -1,10 +1,9 @@
 # LICENSE OF DEVELOPMENT AND RUNTIME DEPENDENCIES
-Working on to collect all licenses in a singe file.  
-For now, if you need to check licenses, go to each repo:
+
+All dependencies included in CTFC gem are registered under MIT license:
 
 **Runtime Dendencies**
 
- - **colorize** - https://github.com/fazibear/colorize **[GPLv2]**
  - **rest-client** - https://github.com/rest-client/rest-client **[MIT]**
  - **optimist** - https://github.com/ManageIQ/optimist **[MIT]**
 

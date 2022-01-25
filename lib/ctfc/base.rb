@@ -5,7 +5,6 @@ require_relative 'version'
 
 require 'json'
 require 'csv'
-require 'colorize'
 require 'rest-client'
 
 ##
@@ -143,14 +142,12 @@ module CTFC
       process_data
       @prices
     rescue StandardError
-      @count += 1
-
-      if @count >= MAX_RETRY
+      if (@count += 1) >= MAX_RETRY
         puts @response.to_s.split(',')
+        false
       else
         do_rest_request
       end
-      false
     end
 
     def process_data
@@ -179,13 +176,13 @@ module CTFC
     def print_fiat_values
       return unless print?
 
-      30.times { print '='.green }
+      30.times { print '='.cyan }
       puts ''
-      puts "#{'['.green}#{@fiat.to_s.upcase.yellow.bold}#{']'.green} conversion rate"
-      30.times { print '='.green }
+      puts "#{'['.cyan.bold}#{@fiat.to_s.upcase.yellow.bold}#{']'.cyan.bold} conversion rate"
+      30.times { print '='.cyan }
       puts ''
       @prices.each do |name, value|
-        print '['.yellow.bold + name.to_s.green.bold + ']'.yellow.bold
+        print '['.yellow.bold + name.to_s.cyan.bold + ']'.yellow.bold
         puts ": #{value}".bold
       end
     end

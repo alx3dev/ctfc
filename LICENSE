@@ -1,5 +1,8 @@
-# CTFC gem is licensed under MIT license.
-# For it's dependencies, look at LICENSE_DEPENDENCIES.md.
+##
+# CTFC gem is copyrighted under MIT license.  
+# From version `0.4.1`, first stable Open Source version, gem `colorize` was removed
+# to keep it all under MIT.
+##
 
 MIT License
 

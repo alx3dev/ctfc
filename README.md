@@ -1,3 +1,8 @@
+[**NOTE:**](https://www.github.com/alx3dev/ctfc/LICENSE_DEPENDENCIES.md)
+ >Removed gem `colorize` to allow **MIT** license.  
+ >All comits from `v-0.4.0` must be signed and tagged **verified**.
+
+
 # About
 Convert any crypto to fiat currency, gather all data and/or save in `.csv` table.  
 For now only prices are printed/saved, while all data remain easily accessible from variable (for developers).  
