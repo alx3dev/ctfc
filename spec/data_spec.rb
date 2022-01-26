@@ -2,28 +2,15 @@
 
 require_relative './spec_helper'
 
-RSpec.describe CTFC do
-  context CTFC::CONFIG do
-    it 'has crypto coins defined before initialisation' do
-      expect(CTFC::CONFIG::COINS).not_to be nil
-    end
+FIAT = :usd
+CRYPTO = %w[BTC XMR ETH].freeze
 
-    it 'has api url defined before initialisation' do
-      expect(CTFC::CONFIG::URL).not_to be nil
-    end
+RSpec.describe CTFC::Data do
+  let(:crypto) { CTFC::Data.new(FIAT, coins: CRYPTO, save: nil, print: nil) }
 
-    it 'has request max retries defined before initialisation' do
-      expect(CTFC::CONFIG::MAX_RETRY).not_to be nil
-    end
-  end
-
-  context CTFC::Data do
-    let(:currency)  { :usd }
-    let(:coins)     { %w[BTC XMR ETH] }
-    let(:crypto)    { CTFC::Data.new(currency, coins: coins, save: nil, print: nil) }
-
+  context 'Initialized Configuration' do
     it 'sets currency as string from given symbol' do
-      expect(crypto.fiat).to eq currency.to_s.upcase
+      expect(crypto.fiat).to eq FIAT.to_s.upcase
       expect(crypto.fiat.class).to be String
     end
 
@@ -42,7 +29,13 @@ RSpec.describe CTFC do
       expect(crypto.print?).not_to be nil
       expect(crypto.print?).to be true
     end
+  end
+end
 
+RSpec.describe CTFC::Data do
+  let(:crypto) { CTFC::Data.new(FIAT, coins: @coins, save: nil, print: nil) }
+
+  context 'Change configuration on-the-fly' do
     it 'sets options passed to #get with precedence over initialized ones' do
       initialized_currency = crypto.fiat
       # execute request

@@ -22,7 +22,9 @@ Gem::Specification.new do |s|
   s.metadata['homepage_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['source_code_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['bug_tracker_uri'] = 'https://github.com/alx3dev/ctfc/issues'
+  s.metadata['changelog_uri'] = 'https://github.com/alx3dev/ctfc/CHANGELOG.md'
   s.metadata['documentation_uri'] = "https://rubydoc.info/gems/#{s.name}"
+  spec.metadata['license_uri'] = "#{spec.homepage}/LICENSE"
   s.metadata['rubygems_mfa_required'] = 'true'
 
   s.files = %w[ bin/ctfc
@@ -35,11 +37,11 @@ Gem::Specification.new do |s|
                 README.md
                 ctfc.gemspec]
 
-  s.required_ruby_version = '>= 3.0.1'
+  s.required_ruby_version = '>= 2.6', '< 4'
 
+  s.add_runtime_dependency 'kolorit', '~> 0.1.3'
   s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
-  s.add_runtime_dependency 'kolorit', '~> 0.1.3'
 
   s.add_development_dependency 'bundler', '~> 2.2.9'
   s.add_development_dependency 'pry', '~> 0.14.1'
