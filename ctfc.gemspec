@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.metadata['bug_tracker_uri'] = 'https://github.com/alx3dev/ctfc/issues'
   s.metadata['changelog_uri'] = 'https://github.com/alx3dev/ctfc/CHANGELOG.md'
   s.metadata['documentation_uri'] = "https://rubydoc.info/gems/#{s.name}"
-  spec.metadata['license_uri'] = "#{spec.homepage}/LICENSE"
+  s.metadata['license_uri'] = 'https://github.com/alx3dev/ctfc/LICENSE'
   s.metadata['rubygems_mfa_required'] = 'true'
 
   s.files = %w[ bin/ctfc
