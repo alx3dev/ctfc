@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.metadata['source_code_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['bug_tracker_uri'] = 'https://github.com/alx3dev/ctfc/issues'
   s.metadata['changelog_uri'] = 'https://github.com/alx3dev/ctfc/CHANGELOG.md'
-  s.metadata['documentation_uri'] = "https://rubydoc.info/gems/#{s.name}"
+  s.metadata['documentation_uri'] = "https://rubydoc.info/gems/#{s.name}/#{s.version}"
   s.metadata['license_uri'] = 'https://github.com/alx3dev/ctfc/LICENSE'
   s.metadata['rubygems_mfa_required'] = 'true'
 

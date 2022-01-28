@@ -158,7 +158,8 @@ ruby bin/ctfc rsd --no-print --loop 1440 --wait 60
 ```  
 
 # Tests
-To run tests use `./check-syntax.sh`.  
+To run tests call `rspec --format doc`  
+To test code syntax  use `./check-syntax.sh`.  
 This command will run rubocop for code inspection, but with some errors hidden by `.rubocop_todo.yml`. Using check-syntax script, all test should pass.
 
 

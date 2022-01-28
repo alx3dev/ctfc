@@ -22,6 +22,7 @@ opts = Optimist.options do
   opt :wait,      'Wait N seconds between loop',  default: 0, type: :integer
 end
 
+coins = opts[:coins]
 save  = opts[:no_save]  ? false : true
 print = opts[:no_print] ? false : true
 
@@ -29,18 +30,19 @@ print = opts[:no_print] ? false : true
 
 if ARGV.empty?
 
-  @crypto.get(:eur, save: false)
+  # default behavior without arguments - change to suit your needs
+  @crypto.get(:eur, save: false, print: true, coins: coins)
 
 else
 
   opts[:loop].times do
     ARGV.each do |fiat|
       next if opts.include?(fiat.downcase)
-
+      # in Ruby 3.1: @crypto.get(fiat, save:, print:, coins:)
       @crypto.get(fiat,
                   save: save,
                   print: print,
-                  coins: opts.coins)
+                  coins: coins)
       sleep 1 # wait between requests
     end
 
