@@ -9,31 +9,26 @@ require 'kolorit'
 require 'rest-client'
 
 ##
-# Module **CTFC** keep everything together. **CTFC::CONFIG** module for default setup,
-# and **CTFC::Data** class for actual request execution. For instance methods look
-# at **CTFC::Data**, for class methods look at **Ctfc**.
-#
-# @see CTFC::Data
+# @see CTFC::Request
+# @see CTFC::API
 # @see Ctfc
 #
 module CTFC
   ##
   # Data class keep all the logic to send request, receive response,
-  # and everything between. Class Ctfc extend CTFC::Data, for easier work.
+  # and everything between. Class Ctfc extend CTFC::Client, for easier work.
   #
-  # @note Instead of using CTFC::Data.new, you can also call Ctfc.new
+  # @note Instead of using CTFC::Client.new, you can also call Ctfc.new
   #
-  class Data
-    include CONFIG
-
-    attr_reader   :response, :data, :url, :table, :count, :prices
+  class Client
+    attr_reader   :response, :data, :url, :table, :prices
     attr_accessor :fiat, :coins
 
     alias currency fiat
 
     ##
     # @example Initialization example
-    #   @data = CTFC::Data.new :eur, save: true
+    #   @data = CTFC::Client.new :eur, save: true
     #
     # @param [Symbol] currency **Optional**. Define fiat currency.
     # @param [Hash] opts **Optional**. Additional options hash.
@@ -42,13 +37,14 @@ module CTFC
     # @option opts [Boolean] save **Optional**. Save `.csv` output.
     # @option opts [Array] coins **Optional**. Define coins to scrap.
     #
-    # @return [Data] Data object to work with
+    # @return [Client] Client instance
     #
-    def initialize(currency = :eur, opts = {})
-      @fiat  = currency.to_s.upcase
-      @save  = opts[:save].nil?  ? true : opts[:save]
-      @print = opts[:print].nil? ? true : opts[:print]
-      @coins = opts[:coins].nil? ? COINS : Array(opts[:coins])
+    def initialize(curr = :eur, opts = {})
+      @fiat   = curr.name.upcase
+      @save   = opts[:save].nil?   ? true           : opts[:save]
+      @print  = opts[:print].nil?  ? true           : opts[:print]
+      @coins  = opts[:coins].nil?  ? COINS          : Array(opts[:coins])
+      @source = opts[:source].nil? ? :cryptocompare : opts[:source]
     end
 
     ##
@@ -65,14 +61,14 @@ module CTFC
     #
     # @return [Hash || false] Hash of coins and fiat values, or false if all requests fail
     #
-    def get(currency = nil, opts = {})
-      @fiat  = currency.to_s.upcase unless currency.nil?
-      @coins = opts[:coins]  unless opts[:coins].nil?
-      @save  = opts[:save]   unless opts[:save].nil?
-      @print = opts[:print]  unless opts[:print].nil?
-      @count = 0
-      @table = "ctfc_#{@fiat}.csv".downcase
-      do_rest_request
+    def get(curr = nil, opts = {})
+      @fiat   = curr.to_s.upcase unless curr.nil?
+      @coins  = opts[:coins]     unless opts[:coins].nil?
+      @save   = opts[:save]      unless opts[:save].nil?
+      @print  = opts[:print]     unless opts[:print].nil?
+      @source = opts[:source]    unless opts[:source].nil?
+      request = Request.new @fiat, @coins, @source
+      @response = request.response
     end
 
     ##
@@ -137,42 +133,6 @@ module CTFC
     end
 
     private
-
-    def do_rest_request
-      prepare_uri
-      process_data
-      @prices
-    rescue StandardError
-      if (@count += 1) >= MAX_RETRY
-        puts @response.to_s.split(',')
-        false
-      else
-        do_rest_request
-      end
-    end
-
-    def process_data
-      @response = RestClient.get @url
-      @data = JSON.parse @response
-
-      @data_array << Time.now.to_s
-      @coins.each do |coin|
-        value = @data['RAW'][coin.to_s.upcase][@fiat.to_s.upcase]['PRICE'].round(2)
-        @prices[coin] = value
-        @data_array << value
-      end
-
-      print_fiat_values
-      save_csv_data
-    end
-
-    def prepare_uri
-      @prices = {}
-      @data_array = []
-      coin_uri = String.new ''
-      @coins.collect { |coin| coin_uri << "fsyms=#{coin}&" }
-      @url = URL + "#{coin_uri}tsyms=#{@fiat}"
-    end
 
     def print_fiat_values
       return unless print?

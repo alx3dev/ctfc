@@ -38,6 +38,7 @@ else
   opts[:loop].times do
     ARGV.each do |fiat|
       next if opts.include?(fiat.downcase)
+
       # in Ruby 3.1: @crypto.get(fiat, save:, print:, coins:)
       @crypto.get(fiat,
                   save: save,
@@ -52,7 +53,7 @@ else
     # pause between loops
     sleep opts[:wait]
 
-    # clear screan - depending on OS
+    # clear screen - depending on OS
     system 'clear' or system 'cls'
   end
 end
