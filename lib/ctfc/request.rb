@@ -4,6 +4,7 @@ require_relative 'api'
 
 module CTFC
   class Request
+    include API
     attr_reader :response
 
     def initialize(fiat: :eur, coins: [], source: :cryptocompare)
@@ -17,7 +18,7 @@ module CTFC
     def process_source(source = response[:source])
       case source
       when :cryptocompare
-        Cryptocompare.get response[:fiat], response[:coins]
+        Cryptocompare.new response[:fiat], response[:coins]
       when :binance
         raise NoMethodError, 'Working on Binance implementation'
       else

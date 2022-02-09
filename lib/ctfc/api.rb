@@ -7,12 +7,21 @@ require_relative 'api/cryptocompare'
 
 module CTFC
   module API
-    def self.list
-      sources = []
-      Dir.entries("#{File.expand_path(__FILE__)}"/api).select do |file|
-        sources << file.gsub('.rb', '').to_sym unless %w[. ..].include? file
+    class << self
+      ##
+      # List available sources by *:symbolizing* filenames without
+      # **.rb** extension in **API** directory.
+      #
+      # @return [Array] Array of symbols as available sources
+      #
+      def list
+        sources, skip = [], %w[. ..]
+        # use select instead of map to avoid nil in array
+        Dir.entries("#{File.expand_path(__FILE__)}/api").select do |source|
+          sources << source.gsub('.rb', '').to_sym unless skip.include? source
+        end
+        sources
       end
-      sources
     end
   end
 end

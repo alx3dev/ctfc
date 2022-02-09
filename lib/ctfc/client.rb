@@ -10,7 +10,6 @@ require 'rest-client'
 
 ##
 # @see CTFC::Request
-# @see CTFC::API
 # @see Ctfc
 #
 module CTFC
@@ -21,7 +20,7 @@ module CTFC
   # @note Instead of using CTFC::Client.new, you can also call Ctfc.new
   #
   class Client
-    attr_reader   :response, :data, :url, :table, :prices
+    attr_reader   :response, :data, :prices
     attr_accessor :fiat, :coins
 
     alias currency fiat
