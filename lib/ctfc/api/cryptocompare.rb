@@ -3,6 +3,10 @@
 module API
   class Cryptocompare < ApiTemplate
 
+    def initialize(fiat, coins, source)
+      super fiat, coins, source
+    end
+
     private
 
     def process(fiat, coins)

@@ -3,7 +3,7 @@
 module CTFC
   module API
     class ApiTemplate
-      include Steroids
+      extend Steroids
 
       MAX_RETRY = 3
       BASE_URL = {
@@ -12,16 +12,14 @@ module CTFC
         cryptocompare: 'https://min-api.cryptocompare.com/data/pricemultifull?'
       }.freeze
 
-      at_reader :response, as:{counter: 0, prices: {},
-                               uri: BASE_URL[self.class.name.downcase.to_sym]}
-
-      def initialize(fiat, coins)
+      def initialize(fiat, coins, source)
+        at_reader :response, as:{counter: 0, prices: {}, uri: BASE_URL[source]}
         process fiat, coins
       end
 
       private
 
-      def process(*)
+      def process(fiat, coins)
       end
     end
   end
@@ -43,6 +41,5 @@ module CTFC
       end
     end
     alias at_reader attribute_reader
-    module_function :attribute_reader
   end
 end

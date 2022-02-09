@@ -18,7 +18,7 @@ module CTFC
     def process_source(source = response[:source])
       case source
       when :cryptocompare
-        Cryptocompare.new response[:fiat], response[:coins]
+        Cryptocompare.new response[:fiat], response[:coins], source
       when :binance
         raise NoMethodError, 'Working on Binance implementation'
       else
