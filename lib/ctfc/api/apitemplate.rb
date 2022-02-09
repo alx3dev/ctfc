@@ -7,6 +7,8 @@ module CTFC
 
       MAX_RETRY = 3
       BASE_URL = {
+        binance: ''
+        kraken: ''
         cryptocompare: 'https://min-api.cryptocompare.com/data/pricemultifull?'
       }.freeze
 
@@ -41,5 +43,6 @@ module CTFC
       end
     end
     alias at_reader attribute_reader
+    module_function :attribute_reader
   end
 end
