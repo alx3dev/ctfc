@@ -20,7 +20,7 @@ module CTFC
   # @note Instead of using CTFC::Client.new, you can also call Ctfc.new
   #
   class Client
-    attr_reader   :response, :data, :prices
+    attr_reader   :response, :prices, :source
     attr_accessor :fiat, :coins
 
     alias currency fiat
@@ -66,8 +66,8 @@ module CTFC
       @save   = opts[:save]      unless opts[:save].nil?
       @print  = opts[:print]     unless opts[:print].nil?
       @source = opts[:source]    unless opts[:source].nil?
-      request = Request.new @fiat, @coins, @source
-      @response = request.response
+      @response = Request[@fiat, @coins, @source]
+      @prices = @response.prices
     end
 
     ##

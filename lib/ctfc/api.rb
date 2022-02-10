@@ -3,24 +3,25 @@
 require 'rest-client'
 require 'json'
 
-require_relative 'api/cryptocompare'
+# automatically require new apis
+CTFC::API.list.select { |x| require_relative x }
 
 module CTFC
   module API
     class << self
-      ##
-      # List available sources by *:symbolizing* filenames without
-      # **.rb** extension in **API** directory.
-      #
-      # @return [Array] Array of symbols as available sources
-      #
+
       def list
-        sources, skip = [], %w[. ..]
-        # use select instead of map to avoid nil in array
+        @list || get_sources_from_files_in_api_dir
+      end
+
+      private
+
+      def get_sources_from_files_in_api_dir
+        sources, skip = [], %w[. .. apitemplate.rb]
         Dir.entries("#{File.expand_path(__FILE__)}/api").select do |source|
           sources << source.gsub('.rb', '').to_sym unless skip.include? source
         end
-        sources
+        @list = sources
       end
     end
   end

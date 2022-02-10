@@ -3,43 +3,42 @@
 module CTFC
   module API
     class ApiTemplate
-      extend Steroids
-
       MAX_RETRY = 3
       BASE_URL = {
-        binance: ''
-        kraken: ''
-        cryptocompare: 'https://min-api.cryptocompare.com/data/pricemultifull?'
-      }.freeze
+        cryptocompare: 'https://min-api.cryptocompare.com/data/pricemultifull?',
+        kraken: '',
+        binance: '' }.freeze
 
-      def initialize(fiat, coins, source)
-        at_reader :response, as:{counter: 0, prices: {}, uri: BASE_URL[source]}
+      attr_reader :response
+
+      def initialize(fiat, coins)
+        @response = { fiat: fiat, coins: coins, uri: BASE_URL[source] }
         process fiat, coins
+      end
+
+      def go
+        process
       end
 
       private
 
-      def process(fiat, coins)
+      def process(fiat = response[:fiat], coins = response[:coins])
+        return false unless fiat && coins
       end
-    end
-  end
 
-  ##
-  # @example Allow attr_reader with default Hash options
-  #
-  #  attribute_reader :client, as: {username: 'alx'}
-  #
-  module Steroids
-    def attribute_reader(*args, **opts)
-      args.count.times do
-        name = args.shift.to_sym
-        if opts.key? :as
-          define_method(name) do
-            instance_variable_set "@#{name}", opts[:as]
-          end
-        end
+      def save_csv_data(table, data_row, coins)
+        return unless save?
+
+        create_csv_headers(table, coins) unless File.exist?(table)
+        CSV.open(table, 'ab') { |column| column << data_row }
       end
+
+      def create_csv_headers(table, coins)
+        header_array = ['TIME']
+        coins.each { |coin| header_array << coin }
+        CSV.open(table, 'w') { |header| header << header_array }
+      end
+
     end
-    alias at_reader attribute_reader
   end
 end
