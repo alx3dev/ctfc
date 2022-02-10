@@ -20,8 +20,8 @@ module CTFC
   # @note Instead of using CTFC::Client.new, you can also call Ctfc.new
   #
   class Client
-    attr_reader   :response, :prices, :source
-    attr_accessor :fiat, :coins
+    attr_reader   :response
+    attr_accessor :fiat, :coins, :prices, :source
 
     alias currency fiat
 
@@ -46,28 +46,9 @@ module CTFC
       @source = opts[:source].nil? ? :cryptocompare : opts[:source]
     end
 
-    ##
-    # @example Get fiat prices for initialized config
-    #
-    #   @data.get
-    #
-    # @example Get prices and change initialized config "on-the-fly"
-    #
-    #   @data.get :usd, save: false, coins: %w[BTC XMR ETH]
-    #
-    # @param [Symbol || String] currency **Optional**. Change fiat currency and execute request.
-    # @param [Hash] opts **Optional**. Options hash to change config 'on-the-fly' - see #initialize.
-    #
-    # @return [Hash || false] Hash of coins and fiat values, or false if all requests fail
-    #
-    def get(curr = nil, opts = {})
-      @fiat   = curr.to_s.upcase unless curr.nil?
-      @coins  = opts[:coins]     unless opts[:coins].nil?
-      @save   = opts[:save]      unless opts[:save].nil?
-      @print  = opts[:print]     unless opts[:print].nil?
-      @source = opts[:source]    unless opts[:source].nil?
-      @response = Request[@fiat, @coins, @source]
-      @prices = @response.prices
+    def get
+      call_api_request
+      prices = response[:prices]
     end
 
     ##
@@ -81,7 +62,7 @@ module CTFC
     # @return [Float]
     #
     def price(coin)
-      @prices[coin.to_s.upcase]
+      prices[coin.to_s.upcase]
     end
 
     ##
@@ -133,31 +114,18 @@ module CTFC
 
     private
 
-    def print_fiat_values
-      return unless print?
-
-      30.times { print '='.cyan }
-      puts ''
-      puts "#{'['.cyan.bold}#{@fiat.to_s.upcase.yellow.bold}#{']'.cyan.bold} conversion rate"
-      30.times { print '='.cyan }
-      puts ''
-      @prices.each do |name, value|
-        print '['.yellow.bold + name.to_s.cyan.bold + ']'.yellow.bold
-        puts ": #{value}".bold
-      end
+    def call_api_request
+      @response =
+        case @source
+        when :cryptocompare
+          Cryptocompare[@fiat, @coins]
+        when :binance
+          # Binance[fiat, coins]
+          raise NoMethodError, 'Working on Binance implementation'
+        else
+          raise NoMethodError, 'Not implemented, yet! Feel free to contribute!'
+        end
     end
 
-    def save_csv_data
-      return unless save?
-
-      create_csv_headers unless File.exist?(@table)
-      CSV.open(@table, 'ab') { |column| column << @data_array }
-    end
-
-    def create_csv_headers
-      header_array = ['TIME']
-      @coins.each { |coin| header_array << coin }
-      CSV.open(@table, 'w') { |header| header << header_array }
-    end
   end
 end

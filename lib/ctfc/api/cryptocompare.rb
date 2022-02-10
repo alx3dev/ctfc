@@ -2,14 +2,11 @@
 
 module API
   class Cryptocompare < ApiTemplate
+   class << self
 
-    def self.[](fiat, coins)
-      result = new fiat, coins
+    def [](fiat, coins)
+      result = prepare_response_hash fiat, coins, :cryptocompare
       result.response
-    end
-
-    def initialize(fiat, coins)
-      super fiat, coins
     end
 
     private
@@ -40,5 +37,6 @@ module API
       end
     end
 
+   end
   end
 end

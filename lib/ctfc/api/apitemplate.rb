@@ -3,6 +3,8 @@
 module CTFC
   module API
     class ApiTemplate
+     class << self
+
       MAX_RETRY = 3
       BASE_URL = {
         cryptocompare: 'https://min-api.cryptocompare.com/data/pricemultifull?',
@@ -11,13 +13,9 @@ module CTFC
 
       attr_reader :response
 
-      def initialize(fiat, coins)
+      def prepare_response_hash(fiat, coins, source)
         @response = { fiat: fiat, coins: coins, uri: BASE_URL[source] }
         process fiat, coins
-      end
-
-      def go
-        process
       end
 
       private
@@ -39,6 +37,7 @@ module CTFC
         CSV.open(table, 'w') { |header| header << header_array }
       end
 
+     end
     end
   end
 end
