@@ -8,7 +8,7 @@ require_relative 'ctfc/base'
 #
 # @note For instance methods look at CTFC::Data.
 #
-class Ctfc < CTFC::Data
+class Ctfc < CTFC::Client
   ##
   # @todo Allow Ctfc to use proxy and/or tor
   #
