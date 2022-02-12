@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'export'
+require_relative 'api'
 require_relative 'version'
 
 require 'json'
@@ -17,6 +18,8 @@ module CTFC
   # Get data from source.
   #
   class Client
+    include CTFC::API
+
     attr_reader   :response
     attr_accessor :fiat, :coins, :prices, :source
 
@@ -31,16 +34,16 @@ module CTFC
     end
 
     def get(source = @source)
-      send_api_request(source)
+      request = send_api_request(source)
+      #binding.pry
+      @response.merge! request
       Export.to_csv(response) if save?
       @prices = response[:prices]
     end
 
     #
     # Get fiat value from response hash with crypto prices
-    #
     # @example
-    #
     #   @data.price(:btc)
     #
     # @param [Symbol || String] coin **Required**. Coin name as symbol or string.
@@ -52,7 +55,6 @@ module CTFC
 
     #
     # Check if crypto prices will be saved in `.csv` table
-    #
     # @return [true || false]
     #
     def save?
@@ -70,7 +72,6 @@ module CTFC
 
     #
     # Change option to save '.csv' table with prices
-    #
     # @return [true || false]
     #
     def save=(opt)
@@ -79,7 +80,6 @@ module CTFC
 
     #
     # Change option to print prices in terminal
-    #
     # @return [true || false]
     #
     def print=(opt)
@@ -88,7 +88,6 @@ module CTFC
 
     #
     # Check if request was successful or not.
-    #
     # @return [true || false]
     #
     def success?
@@ -103,7 +102,7 @@ module CTFC
       @response =
         case source
         when :cryptocompare
-          Cryptocompare[@fiat, @coins]
+          Cryptocompare[fiat, coins]
         when :binance
           # Binance[fiat, coins]
           raise NoMethodError, 'Working on Binance implementation'

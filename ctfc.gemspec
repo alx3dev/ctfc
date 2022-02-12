@@ -31,20 +31,22 @@ Gem::Specification.new do |s|
                 bin/console
                 lib/ctfc.rb
                 lib/ctfc/version.rb
-                lib/ctfc/base.rb
-                lib/ctfc/config.rb
+                lib/ctfc/export.rb
+                lib/ctfc/client.rb
+                lib/ctfc/api.rb
+                lib/ctfc/api/apitemplate.rb
+                lib/ctfc/api/cryptocompare.rb
                 LICENSE
                 README.md
                 ctfc.gemspec]
 
-  s.required_ruby_version = '>= 2.6', '< 4'
+  s.required_ruby_version = '~> 3'
 
   s.add_runtime_dependency 'kolorit', '~> 0.1.3'
   s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
 
-  s.add_development_dependency 'bundler', '~> 2.2.9'
-  s.add_development_dependency 'pry', '~> 0.14.1'
-  s.add_development_dependency 'rake', '~> 13.0.3'
-  s.add_development_dependency 'rspec', '~> 3.10.0'
+  s.add_development_dependency 'bundler', '~> 2.3'
+  s.add_development_dependency 'pry', '~> 0.14'
+  s.add_development_dependency 'rake', '~> 13.0'
 end

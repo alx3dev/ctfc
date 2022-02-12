@@ -3,10 +3,10 @@
 module Export
   class << self
 
-    def to_csv(**response)
-      table = response[:table]
+    def to_csv(response = {})
+      table = "ctfc_#{response[:fiat]}_#{response[:source]}.csv"
       coins = response[:coins]
-      data_row = get_price_array_from response
+      data_row = price_array_from response
       create_csv_headers(table, coins) unless File.exist?(table)
       CSV.open(table, 'ab') { |column| column << data_row }
     end
@@ -19,7 +19,7 @@ module Export
       CSV.open(table, 'w') { |header| header << header_array }
     end
 
-    def get_price_array_from(**response)
+    def price_array_from(response = {})
       price_array = [response[:time_at]]
       response[:prices].each do |coin, price|
         price_array << price

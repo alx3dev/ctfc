@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'ctfc/base'
+require_relative 'ctfc/client'
 
 ##
 # For easier job use Ctfc, instead of typing CTFC::Data.
