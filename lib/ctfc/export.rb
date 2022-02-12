@@ -2,8 +2,8 @@
 
 module Export
   class << self
-    def to_csv(response = {})
-      table = "ctfc_#{response[:fiat]}_#{response[:source]}.csv"
+    def to_csv(source, response = {})
+      table = "ctfc_#{response[:fiat]}_#{source}.csv"
       coins = response[:coins]
       data_row = price_array_from response
       create_csv_headers(table, coins) unless File.exist?(table)

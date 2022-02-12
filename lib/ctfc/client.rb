@@ -37,8 +37,8 @@ module CTFC
       request = send_api_request(source)
       # binding.pry
       @response.merge! request
-      Export.to_csv(response) if save?
       @prices = response[:prices]
+      Export.to_csv(source, response) if save?
     end
 
     #
