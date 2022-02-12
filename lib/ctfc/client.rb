@@ -26,7 +26,7 @@ module CTFC
     alias currency fiat
 
     def initialize(curr = :eur, opts = {})
-      @fiat   = curr.name.upcase
+      @fiat   = curr.to_s.upcase
       @save   = opts[:save].nil?   ? true           : opts[:save]
       @print  = opts[:print].nil?  ? true           : opts[:print]
       @coins  = opts[:coins].nil?  ? COINS          : Array(opts[:coins])
@@ -35,7 +35,7 @@ module CTFC
 
     def get(source = @source)
       request = send_api_request(source)
-      #binding.pry
+      # binding.pry
       @response.merge! request
       Export.to_csv(response) if save?
       @prices = response[:prices]
@@ -110,6 +110,5 @@ module CTFC
           raise NoMethodError, 'Not implemented, yet! Feel free to contribute!'
         end
     end
-
   end
 end

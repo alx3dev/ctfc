@@ -2,7 +2,6 @@
 
 module Export
   class << self
-
     def to_csv(response = {})
       table = "ctfc_#{response[:fiat]}_#{response[:source]}.csv"
       coins = response[:coins]
@@ -21,11 +20,10 @@ module Export
 
     def price_array_from(response = {})
       price_array = [response[:time_at]]
-      response[:prices].each do |coin, price|
+      response[:prices].each do |_coin, price|
         price_array << price
       end
       price_array
     end
-
   end
 end

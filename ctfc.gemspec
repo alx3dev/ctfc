@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
                 README.md
                 ctfc.gemspec]
 
-  s.required_ruby_version = '~> 3'
+  s.required_ruby_version = '> 2.7', '< 3.2'
 
   s.add_runtime_dependency 'kolorit', '~> 0.1.3'
   s.add_runtime_dependency 'optimist', '~> 3.0.1'
