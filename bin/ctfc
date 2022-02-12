@@ -15,7 +15,7 @@ opts = Optimist.options do
   banner '  ruby bin/ctfc eur usd --no-save --coins btc xmr ltc'
   banner ''
 
-  opt :coins,     'Set crypto coins', default: CTFC::CONFIG::COINS
+  opt :coins,     'Set crypto coins', default: %w[BTC XMR ETH LTC]
   opt :no_save,   "Do not save '.csv' output"
   opt :no_print,  'Do not print terminal output'
   opt :loop,      'Run script N times',           default: 1, type: :integer
@@ -31,20 +31,16 @@ print = opts[:no_print] ? false : true
 if ARGV.empty?
 
   # default behavior without arguments - change to suit your needs
-  @crypto.get(:eur, save: false, print: true, coins: coins)
-
+  crypto = CTFC::Client.new(:eur, save: true, print: true, coins: coins)
+  crypto.get
 else
-
   opts[:loop].times do
     ARGV.each do |fiat|
       next if opts.include?(fiat.downcase)
 
-      # in Ruby 3.1: @crypto.get(fiat, save:, print:, coins:)
-      @crypto.get(fiat,
-                  save: save,
-                  print: print,
-                  coins: coins)
-      sleep 1 # wait between requests
+      crypto = CTFC::Client.new(fiat, save: save, print: print, coins: coins)
+      crypto.get
+      sleep 0.5
     end
 
     # end if no `--loop` arg

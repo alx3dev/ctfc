@@ -13,7 +13,6 @@ class Ctfc < CTFC::Client
   # @todo Allow Ctfc to use proxy and/or tor
   #
   def initialize(currency = :eur, opts = {})
-    opts[:coins] ||= COINS
     super(currency, opts)
   end
 

@@ -29,10 +29,10 @@ module CTFC
         data = JSON.parse request
         process_json_data fiat, coins, data, time
       rescue StandardError => e
-        if (@counter += 1) > MAX_RETRY
+        success! set: false
+        if (@response[:counter] += 1) > MAX_RETRY
           puts e.message
-          @counter = 0
-          false
+          @response[:counter] = 0
         else
           retry
         end
@@ -44,6 +44,7 @@ module CTFC
           value = data['RAW'][coin.upcase][fiat.upcase]['PRICE'].round(2)
           prices[coin] = value
         end
+        success!
         @response.merge! time_at: time_at, data: data, prices: prices
       end
     end

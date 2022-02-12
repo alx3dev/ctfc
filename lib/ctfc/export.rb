@@ -10,6 +10,17 @@ module Export
       CSV.open(table, 'ab') { |column| column << data_row }
     end
 
+    def to_json(source, response = {})
+      table = "ctfc_#{response[:fiat]}_#{source}.json"
+      data = JSON.pretty_generate(response[:data])
+      File.write(table, data)
+    end
+
+    def all(*args)
+      to_csv(*args)
+      to_json(*args)
+    end
+
     private
 
     def create_csv_headers(table, coins)

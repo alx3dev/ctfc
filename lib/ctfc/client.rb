@@ -27,10 +27,10 @@ module CTFC
 
     def initialize(curr = :eur, opts = {})
       @fiat   = curr.to_s.upcase
-      @save   = opts[:save].nil?   ? true           : opts[:save]
-      @print  = opts[:print].nil?  ? true           : opts[:print]
-      @coins  = opts[:coins].nil?  ? COINS          : Array(opts[:coins])
-      @source = opts[:source].nil? ? :cryptocompare : opts[:source]
+      @print  = opts[:print]  || true
+      @save   = opts[:save]   || true
+      @coins  = opts[:coins]  || %w[BTC XMR LTC ETH]
+      @source = opts[:source] || :cryptocompare
     end
 
     def get(source = @source)
@@ -39,6 +39,7 @@ module CTFC
       @response.merge! request
       @prices = response[:prices]
       Export.to_csv(source, response) if save?
+      # pp prices if print?
     end
 
     #
@@ -86,14 +87,8 @@ module CTFC
       @print = opt.is_a?(TrueClass)
     end
 
-    #
-    # Check if request was successful or not.
-    # @return [true || false]
-    #
     def success?
-      return false if @response.nil?
-
-      @response.code == 200
+      response[:success] == true
     end
 
     private
