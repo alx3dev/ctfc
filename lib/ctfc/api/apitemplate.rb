@@ -5,7 +5,7 @@ module CTFC
     # Template for other sources. Every file in api dir should extend this class.
     # Automatically call method #process to send api request after initialization.
     # This mean every source should include #process method, that will be executed
-    # after calling **super** in initialize.
+    # after initialization.
     #
     # @see CTFC::API::Cryptocompare
     #
@@ -17,18 +17,31 @@ module CTFC
 
       # Construct response hash from given arguments, and start counting requests.
       #
+      # @example Send request to cryptocompare
+      #  crypto = Cryptocompare.new :eur, %w[BTC XMR]
+      #
       # @param [Symbol] fiat **Required**. Fiat currency to convert coin price.
       # @param [Array] coins **Required**. Array of coins to scrap data for.
-      # @param [Symbol] source **Required**. Source to tell us which api to call.
       #
-      # @return [Object] ApiTemplate instance.
+      # @return [Object] Source instance.
       #
-      def initialize(fiat, coins, source)
-        @response = { fiat: fiat,
-                      coins: coins,
-                      success: false }
+      def initialize(fiat, coins)
+        @response = { fiat: fiat, coins: coins, success: false }
         @counter  = 0
         process
+      end
+
+      # Initialize new instance, send request and return response hash.
+      # @example
+      #  Cryptocompare[:eur, %w[BTC XMR]]
+      #
+      # @param [Symbol] fiat **Required**. Fiat currency.
+      # @param [Array] coins **Required**. Cryptocurrency coins.
+      #
+      # @return [Hash] Response hash object.
+      #
+      def self.[](fiat, coins)
+        new(fiat, coins).response
       end
 
       private

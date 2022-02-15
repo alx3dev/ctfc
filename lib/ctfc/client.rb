@@ -6,20 +6,18 @@ require_relative 'version'
 
 require 'json'
 require 'csv'
-require 'kolorit'
 require 'rest-client'
 
 # @see CTFC::Request
 # @see Ctfc
 #
 module CTFC
-
   # Initialize client to set configuration, and get data from source.
   #
   class Client
     include CTFC::API
 
-    attr_reader   :response, :prices
+    attr_reader   :response, :prices, :save
     attr_accessor :fiat, :coins, :source
 
     alias currency fiat
@@ -47,14 +45,13 @@ module CTFC
     #  client.get :cryptocompare
     #
     # @param [Symbol] source Source to send api request
-    # @return [Hash] Hash of fiat values for scrapped coins 
+    # @return [Hash] Hash of fiat values for scrapped coins
     #
     def get(source = @source)
-      request = send_api_request(source)
+      send_api_request(source)
       # binding.pry
-      @prices = response[:prices]
       Export.to_csv(source, response) if save?
-      prices
+      @prices = response[:prices]
     end
 
     # Get fiat value from response hash with crypto prices

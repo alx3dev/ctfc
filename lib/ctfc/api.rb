@@ -6,9 +6,15 @@ require 'rest-client'
 require 'json'
 
 module CTFC
+  # Keep sources to scrap data. Each source should be class,
+  # named as api domain, extending ApiTemplate.
+  #
+  # @example Add new source
+  #  class NewSource < ApiTemplate
+  #  end
+  #
   module API
     class << self
-      #
       # Get list of sources from files in api dir.
       #
       def list
