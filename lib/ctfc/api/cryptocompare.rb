@@ -5,8 +5,7 @@ require_relative 'apitemplate'
 module CTFC
   module API
     # Source file for cryptocompare api.
-    #
-    # Initialize will automatically call #process
+    # Initialize will automatically call #process,
     # to send request after all settings are configured.
     #
     # @see CTFC::API::ApiTemplate
@@ -17,6 +16,8 @@ module CTFC
 
       private
 
+      # Send API request. Automatically called on initialization,
+      # to scrap data from source.
       def process
         super
         uri = ''
@@ -32,7 +33,7 @@ module CTFC
         rest = RestClient.get response[:uri]
         process_json_data JSON.parse(rest), time
       rescue StandardError => e
-        success! set: false
+        request_fail!
         if (@counter += 1) > MAX_RETRY
           puts e.message
           @counter = 0
@@ -48,8 +49,8 @@ module CTFC
           value = data['RAW'][coin.upcase][fiat.upcase]['PRICE'].round(2)
           prices[coin] = value
         end
-        success!
-        @response.merge! time_at: time_at, data: data, prices: prices
+        @response.merge!(time_at: time_at, data: data,
+                         prices: prices, success: true)
       end
     end
   end

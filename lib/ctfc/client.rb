@@ -8,10 +8,8 @@ require 'json'
 require 'csv'
 require 'rest-client'
 
-# @see CTFC::Request
-# @see Ctfc
-#
 module CTFC
+  #
   # Initialize client to set configuration, and get data from source.
   #
   class Client
@@ -21,6 +19,10 @@ module CTFC
     attr_accessor :fiat, :coins, :source
 
     alias currency fiat
+
+    def self.to(*args)
+      new(*args).get
+    end
 
     # Choose fiat currency, coins and source for new client.
     # @example Initialize new **EUR** client
@@ -49,7 +51,6 @@ module CTFC
     #
     def get(source = @source)
       send_api_request(source)
-      # binding.pry
       Export.to_csv(source, response) if save?
       @prices = response[:prices]
     end

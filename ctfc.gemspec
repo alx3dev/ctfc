@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
   s.require_paths = 'lib'
   s.executables = 'ctfc'
 
+  s.required_ruby_version = '>= 2.7', '< 3.1'
+
   s.metadata['homepage_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['source_code_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['bug_tracker_uri'] = 'https://github.com/alx3dev/ctfc/issues'
@@ -38,9 +40,6 @@ Gem::Specification.new do |s|
                 README.md
                 ctfc.gemspec]
 
-  s.required_ruby_version = '> 2.7', '< 3.2'
-
-  s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
 
   s.add_development_dependency 'bundler', '~> 2.3'

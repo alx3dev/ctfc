@@ -46,8 +46,11 @@ module CTFC
 
       private
 
-      # @todo api key support
-      # @todo proxy support
+      # Method to scrap data from source. Call **super** in source file
+      # to check for currency and coins in response hash.
+      #
+      # @todo add api-key and proxy support
+      #
       def process
         return false unless response[:fiat] && response[:coins]
       end
