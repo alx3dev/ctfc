@@ -27,9 +27,7 @@ Gem::Specification.new do |s|
   s.metadata['license_uri'] = 'https://github.com/alx3dev/ctfc/LICENSE'
   s.metadata['rubygems_mfa_required'] = 'true'
 
-  s.files = %w[ bin/ctfc
-                bin/console
-                lib/ctfc.rb
+  s.files = %w[ lib/ctfc.rb
                 lib/ctfc/version.rb
                 lib/ctfc/export.rb
                 lib/ctfc/client.rb
@@ -42,7 +40,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '> 2.7', '< 3.2'
 
-  s.add_runtime_dependency 'kolorit', '~> 0.1.3'
   s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
 

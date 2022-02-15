@@ -4,43 +4,79 @@ require_relative 'apitemplate'
 
 module CTFC
   module API
+    # Source file for cryptocompare api.
     class Cryptocompare < ApiTemplate
+      # Cryptocompare API base url, where we add coins and fiat currency.
+      BASE_URL = 'https://min-api.cryptocompare.com/data/pricemultifull?'
+
+      # Initialize new instance, send request and return response hash.
+      # @example
+      #  Cryptocompare[:eur, %w[BTC XMR]]
+      #
+      # @param [Symbol] fiat **Required**. Fiat currency.
+      # @param [Array] coins **Required**. Cryptocurrency coins.
+      #
+      # @return [Hash] Response hash object.
+      #
       def self.[](fiat, coins)
         new(fiat, coins).response
       end
 
+      # Initialize will automatically call #process
+      # to send request after all settings are configured.
+      #
+      # @example Send request to cryptocompare
+      #  crypto = Cryptocompare.new :eur, %w[BTC XMR]
+      #
+      # @param [Symbol] fiat **Required**. Fiat currency.
+      # @param [Array] coins **Required**. Cryptocurrency coins.
+      #
+      # @return [Object] Cryptocompare instance.
+      #
       def initialize(fiat, coins)
         super fiat, coins, :cryptocompare
+      end
+
+      # Repeat request to cryptocompare api
+      # @example Repeat request
+      #  crypto.get
+      #
+      def get
+        do_rest_request
       end
 
       private
 
       def process
         super
-        uri = response[:uri]
-        fiat = response[:fiat]
-        coins = response[:coins]
-        coins.collect do |coin|
+        uri = ''
+        response[:coins].collect do |coin|
           uri += "fsyms=#{coin}&" unless uri.include? coin
         end
-        uri += "tsyms=#{fiat}" unless uri.include? fiat
+        uri += "tsyms=#{response[:fiat]}"
+        @response[:uri] = BASE_URL + uri
+        do_rest_request
+      end
+
+      def do_rest_request
         time = Time.now.to_s
-        request = RestClient.get uri
-        data = JSON.parse request
-        process_json_data fiat, coins, data, time
+        rest = RestClient.get response[:uri]
+        data = JSON.parse rest
+        process_json_data data, time
       rescue StandardError => e
         success! set: false
-        if (@response[:counter] += 1) > MAX_RETRY
+        if (@counter += 1) > MAX_RETRY
           puts e.message
-          @response[:counter] = 0
+          @counter = 0
         else
           retry
         end
       end
 
-      def process_json_data(fiat, coins, data, time_at)
+      def process_json_data(data, time_at)
+        fiat = response[:fiat]
         prices = {}
-        coins.each do |coin|
+        response[:coins].each do |coin|
           value = data['RAW'][coin.upcase][fiat.upcase]['PRICE'].round(2)
           prices[coin] = value
         end

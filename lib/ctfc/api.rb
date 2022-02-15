@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
+require_relative 'api/apitemplate'
+
 require 'rest-client'
 require 'json'
-
-require_relative 'api/apitemplate'
 
 module CTFC
   module API
     class << self
+      #
+      # Get list of sources from files in api dir.
+      #
       def list
         @list ||= list_files_in_api_dir
       end
