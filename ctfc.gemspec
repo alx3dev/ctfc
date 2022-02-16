@@ -5,10 +5,11 @@ require_relative './lib/ctfc/version'
 Gem::Specification.new do |s|
   s.name        = 'ctfc'
   s.version     = CTFC::VERSION
-  s.summary     = 'Cryptocurrency to Fiat values, get data and save prices.'
+  s.summary     = 'Cryptocurrency data gathering gem. Scrap and save as CSV and/or JSON.'
   s.description = <<~DESCRIPTION
-    Convert any cryptocurrency to any fiat value, export data to csv table.
-    Print colorized terminal output.
+    Cryptocurrency data gathering gem. Get data from multiple APIs, print and
+    save output as you wish. Run script from terminal, or use in another app.
+    Class-template based, easy to extend to add more sources. MIT License.
   DESCRIPTION
 
   s.license = 'MIT'
@@ -18,8 +19,6 @@ Gem::Specification.new do |s|
   s.bindir = 'bin'
   s.require_paths = 'lib'
   s.executables = 'ctfc'
-
-  s.required_ruby_version = '>= 2.7', '< 3.1'
 
   s.metadata['homepage_uri'] = 'https://github.com/alx3dev/ctfc'
   s.metadata['source_code_uri'] = 'https://github.com/alx3dev/ctfc'
@@ -40,6 +39,10 @@ Gem::Specification.new do |s|
                 README.md
                 ctfc.gemspec]
 
+  s.required_ruby_version = '> 2.7', '< 3.2'
+
+  s.add_runtime_dependency 'optimist', '~> 3.0.1'
+  s.add_runtime_dependency 'kolorit', '~> 0.2'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
 
   s.add_development_dependency 'bundler', '~> 2.3'
