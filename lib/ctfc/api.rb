@@ -1,19 +1,22 @@
 # frozen_string_literal: true
 
-require_relative 'api/apitemplate'
+require_relative 'version' unless defined? CTFC::VERSION
+require_relative 'api/apitemplate' unless defined? CTFC::API::ApiTemplate
 
-require 'rest-client'
-require 'json'
+# automatically require new apis
+CTFC::API.list.select { |source| require_relative "api/#{source}" }
 
 module CTFC
   #
-  # Keep sources to extract data. Each source shall be class,
-  # named as API domain, extending ApiTemplate.
+  # Keep sources to extract data. Each source has to be a class,
+  # named as API domain, extending ApiTemplate. This will automatically
+  # make it available in Client, but also added to .gemspec.
   #
   # @see CTFC::API::ApiTemplate
   # @see CTFC::API::Cryptocompare
   #
   # @example Add a new source to extract data:
+  #  # make file new_source.rb
   #  class NewSource < ApiTemplate
   #
   #    private
@@ -26,33 +29,5 @@ module CTFC
   #  end
   #
   module API
-    class << self
-      #
-      # Get list of sources from files in api dir.
-      # @return [Array] Array of symbols.
-      #
-      def list
-        @list ||= list_files_in_api_dir
-      end
-
-      private
-
-      def list_files_in_api_dir
-        sources = []
-        skip = %w[. .. apitemplate.rb]
-        path = File.expand_path(__FILE__).gsub!('.rb', '')
-        Dir.entries(path).select do |source|
-          next if skip.include? source
-
-          sources << source.gsub('.rb', '').to_sym
-        end
-        sources
-      end
-    end
   end
 end
-#
-# automatically require new apis
-# to-do: change #to_s to #name for ruby3
-#
-CTFC::API.list.select { |source| require_relative "api/#{source}" }

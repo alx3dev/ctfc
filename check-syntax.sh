@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-rubocop --format simple --config .rubocop.yml
+rubocop --format simple --config .rubocop_todo.yml

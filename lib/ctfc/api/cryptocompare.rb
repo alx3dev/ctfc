@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative 'apitemplate'
+require_relative 'apitemplate' unless defined? CTFC::API::ApiTemplate
 
 module CTFC
   module API
     # Source file for cryptocompare api.
     # Initialize will automatically call #process,
-    # to send request after all settings are configured.
+    # to send request after all attributes and variables are configured.
     #
     # @see CTFC::API::ApiTemplate
     #
@@ -28,7 +28,7 @@ module CTFC
       end
 
       def do_rest_request(time = Time.now)
-        rest = RestClient.get response[:uri]
+        rest = RestClient.get(response[:uri])
         success! if rest.code == 200
         process_json_data JSON.parse(rest), time
       rescue StandardError => e

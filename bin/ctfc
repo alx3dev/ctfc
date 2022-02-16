@@ -6,8 +6,7 @@ require 'optimist'
 require 'kolorit'
 
 opts = Optimist.options do
-  version "Crypto To Fiat Currency\n" \
-          + "Gem Version: #{CTFC::VERSION}"
+  version "Crypto To Fiat Currency\nGem Version: #{CTFC::VERSION}"
 
   banner ''
   banner ' Enter fiat currencies with/out additional arguments:'
@@ -17,20 +16,22 @@ opts = Optimist.options do
   banner ''
 
   opt :coins,     'Set crypto coins', default: %w[BTC XMR ETH LTC]
-  opt :no_save,   "Do not save '.csv' output"
+  opt :save,      "Save prices in '.csv' table"
+  opt :export,    "Export all data in '.json' file"
   opt :no_print,  'Do not print terminal output'
   opt :loop,      'Run script N times',           default: 1, type: :integer
   opt :wait,      'Wait N seconds between loop',  default: 0, type: :integer
 end
 
 coins = opts[:coins]
-save  = opts[:no_save]  ? false : true
+save  = opts[:save]
+export = opts[:export]
 print = opts[:no_print] ? false : true
 
 if ARGV.empty?
 
   # default behavior without arguments - change to suit your needs
-  crypto = CTFC::Client.new(:eur, coins, :cryptocompare, save: true, print: true)
+  crypto = CTFC::Client.new(:eur, coins, :cryptocompare, save: false)
   crypto.get
   crypto.prices.each { |x, y| puts "#{x}: #{y} eur".cyan.bold } if print
 else
@@ -38,7 +39,9 @@ else
     ARGV.each do |fiat|
       next if opts.include?(fiat.downcase)
 
-      crypto = CTFC::Client.new(fiat, coins, :cryptocompare, save: save, print: print)
+      crypto = CTFC::Client.new(fiat, coins, :cryptocompare,
+                                save: save, export: export, print: print)
+
       crypto.get
       crypto.prices.each { |x, y| puts "#{x}: #{y} #{fiat}".cyan.bold } if print
       sleep 0.5

@@ -29,20 +29,25 @@ Gem::Specification.new do |s|
   s.metadata['rubygems_mfa_required'] = 'true'
 
   s.files = %w[ lib/ctfc.rb
-                lib/ctfc/version.rb
-                lib/ctfc/export.rb
                 lib/ctfc/client.rb
+                lib/ctfc/export.rb
+                lib/ctfc/version.rb
                 lib/ctfc/api.rb
                 lib/ctfc/api/apitemplate.rb
-                lib/ctfc/api/cryptocompare.rb
                 LICENSE
                 README.md
                 ctfc.gemspec]
 
+  # auto-add sources in api dir
+  CTFC::API.list_of_sources.select do |source|
+    file = "lib/ctfc/api/#{source}"
+    s.files += [file]
+  end
+
   s.required_ruby_version = '> 2.7', '< 3.2'
 
-  s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'kolorit', '~> 0.2'
+  s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
 
   s.add_development_dependency 'bundler', '~> 2.3'

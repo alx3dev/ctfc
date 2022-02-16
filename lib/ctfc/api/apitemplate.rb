@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
+require 'rest-client'
+require 'json'
+
 module CTFC
   module API
     # Template for other sources. Every file in api dir should extend this class.
     # Automatically call method #process to send api request after initialization.
-    # This mean every source should include #process method, that will be executed
+    # This mean every source should include method #process, that will be executed
     # after initialization.
     #
+    # @see CTFC::API
     # @see CTFC::API::Cryptocompare
     #
     class ApiTemplate

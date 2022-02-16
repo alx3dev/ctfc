@@ -2,19 +2,13 @@
 
 require_relative 'export'
 require_relative 'api'
-require_relative 'version'
-
-require 'json'
-require 'csv'
-require 'rest-client'
 
 module CTFC
   #
   # Initialize client to set configuration, and get data from source.
+  # Client allow us to get data from any source, and to manipulate with data.
   #
   class Client
-    include CTFC::API
-
     attr_reader :config, :response, :prices
 
     def self.to(*args)
@@ -25,13 +19,14 @@ module CTFC
     # @example Initialize new **EUR** client
     #  client = CTFC::Client.new :eur, %w[BTC XMR LTC ETH]
     #
-    # @param [Symbol] currency **Required**. Set fiat currency
+    # @param [Symbol] currency **Required**. Set fiat currency.
     # @param [Array] coins **Required**. Set crypto coins.
     # @param [Symbol] source Optional. Source for data extraction.
     # @param [Hash] opts Options hash for additional configuration.
     #
     # @option opts [Symbol] source Set source to extract data.
-    # @option opts [Boolean] save Set option to export data to file.
+    # @option opts [Boolean] save Set option to save prices in csv table.
+    # @option opts [Boolean] export Set option to export all data in json file.
     #
     # @return [Client] Client instance.
     #
@@ -40,7 +35,8 @@ module CTFC
         fiat: fiat,
         coins: coins,
         source: source || opts[:source],
-        save: [nil, true].include?(opts[:save])
+        save: [nil, true].include?(opts[:save]),
+        export: opts[:export].is_a?(TrueClass)
       }
     end
 
@@ -54,8 +50,10 @@ module CTFC
     def get(source = nil)
       source ||= config[:source]
       send_api_request(source)
-      Export.to_csv(source, response) if save?
-      Export.to_json(source, response) if export?
+      if success?
+        Export.to_csv(source, response) if save?
+        Export.to_json(source, response) if export?
+      end
       @prices = response[:prices]
     end
 
@@ -74,28 +72,28 @@ module CTFC
     end
 
     # Check if csv output will be saved after request.
-    # @return [true || false]
+    # @return [Boolean]
     #
     def save?
-      config[:save] == true
+      config[:save].is_a?(TrueClass)
     end
 
-    # Change option to save csv output after request.
-    # @return [true || false]
+    # Change option to save prices in csv table after request.
+    # @return [Boolean]
     #
     def save=(opt)
       @config[:save] = opt.is_a?(TrueClass)
     end
 
     # Check if json output will be exported after request.
-    # @return [true || false]
+    # @return [Boolean]
     #
     def export?
-      config[:export] == true
+      config[:export].is_a?(TrueClass)
     end
 
-    # Change option to save csv output after request.
-    # @return [true || false]
+    # Change option to export all data in json file after request.
+    # @return [Boolean]
     #
     def export=(opt)
       @config[:export] = opt.is_a?(TrueClass)
@@ -115,21 +113,32 @@ module CTFC
     # Check if request was successful.
     #
     def success?
-      response[:success] == true
+      return false if response.nil?
+
+      response[:success].is_a?(TrueClass)
     end
 
     private
 
     def send_api_request(source)
-      fiat = config[:fiat]
-      coins = config[:coins]
-      @response = case source
-                  when :cryptocompare
-                    Cryptocompare[fiat, coins]
-                  else
-                    raise NoMethodError, 'Not implemented, yet! ' \
-                                         'Feel free to contribute!'
-                  end
+      # automatically add new sources to the client, but be careful with eval.
+      if API.list.include? source
+        klass = check_source_name source
+        @response = eval "CTFC::API::#{klass}[config[:fiat], config[:coins]]"\
+                         '# CTFC::API::Crypto_Exchange[fiat, coins]'
+      else
+        message = 'Add source to extract data' if source.nil?
+        message = "#{source} not included in API list" if source
+        raise ArgumentError, message
+      end
+    end
+
+    def check_source_name(source)
+      if source.to_s.include? '_'
+        source.split('_').select(&:capitalize!).join
+      else
+        source.to_s.capitalize
+      end
     end
   end
 end

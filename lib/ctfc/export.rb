@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'csv'
+
 # Keep methods to export data as csv or json.
-# JSON extract all data, while CSV only save prices.
+# JSON extract all data, while CSV only prices.
 #
 module Export
   class << self
