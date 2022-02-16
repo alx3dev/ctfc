@@ -40,7 +40,7 @@ module CTFC
         fiat: fiat,
         coins: coins,
         source: source || opts[:source],
-        save: [nil, true].include? opts[:save]
+        save: [nil, true].include?(opts[:save])
       }
     end
 
