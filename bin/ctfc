@@ -3,9 +3,10 @@
 
 require_relative '../lib/ctfc'
 require 'optimist'
+require 'kolorit'
 
 opts = Optimist.options do
-  version "Crypto To Fiat Currency\n".cyan.bold \
+  version "Crypto To Fiat Currency\n" \
           + "Gem Version: #{CTFC::VERSION}"
 
   banner ''
@@ -26,20 +27,20 @@ coins = opts[:coins]
 save  = opts[:no_save]  ? false : true
 print = opts[:no_print] ? false : true
 
-@crypto = Ctfc.new
-
 if ARGV.empty?
 
   # default behavior without arguments - change to suit your needs
-  crypto = CTFC::Client.new(:eur, save: true, print: true, coins: coins)
+  crypto = CTFC::Client.new(:eur, coins, :cryptocompare, save: true, print: true)
   crypto.get
+  crypto.prices.each { |x, y| puts "#{x}: #{y} eur".cyan.bold } if print
 else
   opts[:loop].times do
     ARGV.each do |fiat|
       next if opts.include?(fiat.downcase)
 
-      crypto = CTFC::Client.new(fiat, save: save, print: print, coins: coins)
+      crypto = CTFC::Client.new(fiat, coins, :cryptocompare, save: save, print: print)
       crypto.get
+      crypto.prices.each { |x, y| puts "#{x}: #{y} #{fiat}".cyan.bold } if print
       sleep 0.5
     end
 
