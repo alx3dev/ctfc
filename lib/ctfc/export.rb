@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-#
-# Keep methods to export data to csv or json.
-# JSON save complete data, while CSV extract only prices.
+# Keep methods to export data as csv or json.
+# JSON extract all data, while CSV only save prices.
 #
 module Export
   class << self
     #
-    # Save crypto prices in csv table
+    # Save crypto prices in csv table.
     #
     def to_csv(source, response = {})
       table = "ctfc_#{response[:fiat]}_#{source}.csv"
@@ -17,21 +16,13 @@ module Export
       CSV.open(table, 'ab') { |column| column << data_row }
     end
 
-    #
-    # Save output as json.
+    # Extract all data in json file.
     #
     def to_json(source, response = {})
       table = "ctfc_#{response[:fiat]}_#{source}.json"
-      data = JSON.pretty_generate(response[:data])
-      File.write(table, data)
-    end
-
-    #
-    # Save prices in csv table, and complete output as json.
-    #
-    def all(*args)
-      to_csv(*args)
-      to_json(*args)
+      File.open(table, 'ab') do |append|
+        append.puts JSON.pretty_generate response
+      end
     end
 
     private
@@ -43,7 +34,7 @@ module Export
     end
 
     def price_array_from(response = {})
-      price_array = [response[:time_at]]
+      price_array = [response[:time]]
       response[:prices].each do |_coin, price|
         price_array << price
       end

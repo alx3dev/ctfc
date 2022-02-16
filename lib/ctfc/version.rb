@@ -2,5 +2,5 @@
 
 module CTFC
   # gem version
-  VERSION = '0.4.2'
+  VERSION = '1-dev'
 end

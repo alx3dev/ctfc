@@ -7,18 +7,19 @@ require 'json'
 
 module CTFC
   #
-  # Keep sources to scrap data. Each source should be class,
-  # named as api domain, extending ApiTemplate.
+  # Keep sources to extract data. Each source shall be class,
+  # named as API domain, extending ApiTemplate.
   #
   # @see CTFC::API::ApiTemplate
   # @see CTFC::API::Cryptocompare
   #
-  # @example Add new source
+  # @example Add a new source to extract data:
   #  class NewSource < ApiTemplate
   #
   #    private
   #
   #    def process
+  #      # check response hash for existence of fiat and coins
   #      super
   #      # write method to scrap data from NewSource
   #    end
@@ -28,7 +29,7 @@ module CTFC
     class << self
       #
       # Get list of sources from files in api dir.
-      # @return [Array] Array of symbols
+      # @return [Array] Array of symbols.
       #
       def list
         @list ||= list_files_in_api_dir

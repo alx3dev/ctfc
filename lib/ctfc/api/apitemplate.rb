@@ -16,6 +16,7 @@ module CTFC
       MAX_RETRY = 3
 
       # Construct response hash from given arguments, and start counting requests.
+      # Call private method #process to extract data from web.
       #
       # @example Send request to cryptocompare
       #  crypto = Cryptocompare.new :eur, %w[BTC XMR]
@@ -46,11 +47,6 @@ module CTFC
 
       private
 
-      # Method to scrap data from source. Call **super** in source file
-      # to check for currency and coins in response hash.
-      #
-      # @todo add api-key and proxy support
-      #
       def process
         return false unless response[:fiat] && response[:coins]
       end

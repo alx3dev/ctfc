@@ -16,8 +16,6 @@ module CTFC
 
       private
 
-      # Send API request. Automatically called on initialization,
-      # to scrap data from source.
       def process
         super
         uri = ''
@@ -29,28 +27,27 @@ module CTFC
         do_rest_request
       end
 
-      def do_rest_request(time = Time.now.to_s)
+      def do_rest_request(time = Time.now)
         rest = RestClient.get response[:uri]
+        success! if rest.code == 200
         process_json_data JSON.parse(rest), time
       rescue StandardError => e
-        request_fail!
+        success! set: false
         if (@counter += 1) > MAX_RETRY
           puts e.message
-          @counter = 0
         else
           retry
         end
       end
 
-      def process_json_data(data, time_at)
+      def process_json_data(data, time)
         fiat = response[:fiat]
         prices = {}
         response[:coins].each do |coin|
-          value = data['RAW'][coin.upcase][fiat.upcase]['PRICE'].round(2)
+          value = data['RAW'][coin.upcase][fiat.to_s.upcase]['PRICE'].round(2)
           prices[coin] = value
         end
-        @response.merge!(time_at: time_at, data: data,
-                         prices: prices, success: true)
+        @response.merge!(time: time.to_s, prices: prices, data: data)
       end
     end
   end
