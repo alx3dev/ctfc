@@ -5,8 +5,9 @@ require_relative 'api'
 
 module CTFC
   #
-  # Initialize client to set configuration, and get data from source.
-  # Client allow us to get data from any source, and to manipulate with data.
+  # Client allow us to get data from our sources, and to
+  # manipulate with that data. While other classes are mostly
+  # used by each-other, Client is mostly used directly by user.
   #
   class Client
     attr_reader :config, :response, :prices
@@ -124,8 +125,10 @@ module CTFC
       # automatically add new sources to the client, but be careful with eval.
       if API.list.include? source
         klass = check_source_name source
-        @response = eval "CTFC::API::#{klass}[config[:fiat], config[:coins]]"\
-                         '# CTFC::API::Crypto_Exchange[fiat, coins]'
+
+        @response =
+          instance_eval "CTFC::API::#{klass}[ config[:fiat], config[:coins] ]"\
+                        '# CTFC::API::Cryptocompare[fiat, coins]', __FILE__, __LINE__ - 1
       else
         message = 'Add source to extract data' if source.nil?
         message = "#{source} not included in API list" if source
@@ -133,6 +136,8 @@ module CTFC
       end
     end
 
+    # Check for underscore and capitalize each word.
+    #
     def check_source_name(source)
       if source.to_s.include? '_'
         source.split('_').select(&:capitalize!).join

@@ -9,6 +9,7 @@ Testing changes before merge.
  - New sources are automatically required and added to `.gemspec`
  - Save prices in `.csv` table
  - Extract all data in `.json` file
+ - Print colorized output - added Cli helper
 
 **Security:**
 

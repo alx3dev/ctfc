@@ -25,8 +25,8 @@ module CTFC
       # @example Send request to cryptocompare
       #  crypto = Cryptocompare.new :eur, %w[BTC XMR]
       #
-      # @param [Symbol] fiat **Required**. Fiat currency to convert coin price.
-      # @param [Array] coins **Required**. Array of coins to scrap data for.
+      # @param [Symbol] fiat **Required**. Fiat currency to use for conversion.
+      # @param [Array] coins **Required**. Array of coins to extract data.
       #
       # @return [Object] Source instance.
       #

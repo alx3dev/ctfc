@@ -2,7 +2,7 @@
 
 module CTFC
   # gem version
-  VERSION = '1-dev'
+  VERSION = '1.0.0-dev'
 
   module API
     class << self
@@ -14,8 +14,7 @@ module CTFC
         @list ||= list_files_in_api_dir
       end
 
-      # Get list of sources from files in api dir.
-      # For use in .gemspec, to allow automated require.
+      # Get list of sources from files in api dir (for .gemspec).
       #
       # @return [Array] Array of sources as strings.
       #

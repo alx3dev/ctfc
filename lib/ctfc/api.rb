@@ -22,7 +22,7 @@ module CTFC
   #    private
   #
   #    def process
-  #      # check response hash for existence of fiat and coins
+  #      # check response hash for persistence of fiat and coins
   #      super
   #      # write method to scrap data from NewSource
   #    end
