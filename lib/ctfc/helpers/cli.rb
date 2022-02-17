@@ -25,7 +25,7 @@ class Cli
     # @example Set terminal colors for price hash
     #  Cli.colors color1: :yellow, color2: :green
     #
-    def colors(clrs = { color1: :yellow, color2: :cyan })
+    def colors(clrs = {})
       config
       @config[:color1] = clrs[:color1] if clrs[:color1]
       @config[:color2] = clrs[:color2] if clrs[:color2]
@@ -46,7 +46,7 @@ class Cli
     end
 
     def config
-      @config ||= {}
+      @config ||= { color1: :yellow, color2: :cyan }
     end
   end
 end
