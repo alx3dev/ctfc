@@ -5,8 +5,6 @@ require 'kolorit'
 # Helper class to print colorized output in terminal.
 #
 class Cli
-  LINES = ('=' * 30).cyan.bold.freeze
-
   class << self
     #
     # @example Print colorized output
@@ -16,9 +14,9 @@ class Cli
     # @param [Hash] prices **Required**. Prices hash.
     #
     def print_output(fiat, prices)
-      puts LINES
+      puts LINE
       puts colorize(:bold) { "[#{fiat.upcase.yellow}#{']'.bold} conversion rate" }
-      puts LINES
+      puts LINE
       prices.each { |coin, value| print_prices coin, value }
     end
 
@@ -26,9 +24,10 @@ class Cli
     #  Cli.colors color1: :yellow, color2: :green
     #
     def colors(clrs = {})
-      config
+      configure if @config.nil?
       @config[:color1] = clrs[:color1] if clrs[:color1]
       @config[:color2] = clrs[:color2] if clrs[:color2]
+      config
     end
 
     private
@@ -48,5 +47,8 @@ class Cli
     def config
       @config ||= { color1: :yellow, color2: :cyan }
     end
+    alias configure config
   end
+  # helper to print line
+  LINE = kolorize ('=' * 30).bold, self.config[:color2]
 end
