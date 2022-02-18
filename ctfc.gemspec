@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative './lib/ctfc/version'
+require_relative './lib/ctfc/helpers/list'
 
 Gem::Specification.new do |s|
   s.name        = 'ctfc'
@@ -39,7 +40,7 @@ Gem::Specification.new do |s|
                 ctfc.gemspec]
 
   # auto-add sources in api dir
-  CTFC::API.list_of_sources.select do |source|
+  List.source_files.select do |source|
     file = "lib/ctfc/api/#{source}"
     s.files += [file]
   end

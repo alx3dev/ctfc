@@ -14,9 +14,9 @@ class Cli
     # @param [Hash] prices **Required**. Prices hash.
     #
     def print_output(fiat, prices)
-      puts LINE
+      puts line
       puts colorize(:bold) { "[#{fiat.upcase.yellow}#{']'.bold} conversion rate" }
-      puts LINE
+      puts line
       prices.each { |coin, value| print_prices coin, value }
     end
 
@@ -25,8 +25,9 @@ class Cli
     #
     def colors(clrs = {})
       configure if @config.nil?
-      @config[:color1] = clrs[:color1] if clrs[:color1]
-      @config[:color2] = clrs[:color2] if clrs[:color2]
+      @config[:color1]     = clrs[:color1]     if clrs[:color1]
+      @config[:color2]     = clrs[:color2]     if clrs[:color2]
+      @config[:line_color] = clrs[:line_color] if clrs[:line_color]
       config
     end
 
@@ -45,10 +46,13 @@ class Cli
     end
 
     def config
-      @config ||= { color1: :yellow, color2: :cyan }
+      @config ||= { color1: :yellow, color2: :cyan, line_color: :cyan }
     end
     alias configure config
+
+    # helper to print line
+    def line
+      kolorize ('=' * 30).bold, config[:line_color]
+    end
   end
-  # helper to print line
-  LINE = kolorize ('=' * 30).bold, self.config[:color2]
 end

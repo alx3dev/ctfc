@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'export'
 require_relative 'api'
+require_relative 'export'
 
 module CTFC
   #
@@ -12,10 +12,7 @@ module CTFC
   class Client
     attr_reader :config, :response, :prices
 
-    def self.to(*args)
-      new(*args).get
-    end
-
+    #
     # Choose fiat currency, coins and source for new client.
     # @example Initialize new **EUR** client
     #  client = CTFC::Client.new :eur, %w[BTC XMR LTC ETH]
@@ -123,7 +120,7 @@ module CTFC
 
     def send_api_request(source)
       # automatically add new sources to the client, but be careful with eval.
-      if API.list.include? source
+      if List.sources.include? source
         klass = check_source_name source
 
         @response =

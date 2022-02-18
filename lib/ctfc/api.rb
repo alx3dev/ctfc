@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'version' unless defined? CTFC::VERSION
+# Benchmark say it's faster to use **unless defined?** if we require file
+# on multiple locations
+
 require_relative 'api/apitemplate' unless defined? CTFC::API::ApiTemplate
+require_relative 'helpers/list' unless defined? List
 
 # automatically require new apis
-CTFC::API.list.select { |source| require_relative "api/#{source}" }
+List.sources.select { |source| require_relative "api/#{source}" }
 
 module CTFC
   #
