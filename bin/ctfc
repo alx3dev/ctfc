@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative '../lib/ctfc'
 require 'optimist'
+require_relative '../lib/ctfc'
+require_relative '../lib/ctfc/helpers/cli'
+
+COINS = %w[BTC XMR ETH LTC].freeze
 
 opts = Optimist.options do
-  version "Crypto To Fiat Currency\n".cyan.bold \
-          + "Gem Version: #{CTFC::VERSION}"
+  version "Crypto To Fiat Currency\nGem Version: #{CTFC::VERSION}"
 
   banner ''
   banner ' Enter fiat currencies with/out additional arguments:'
@@ -15,44 +17,38 @@ opts = Optimist.options do
   banner '  ruby bin/ctfc eur usd --no-save --coins btc xmr ltc'
   banner ''
 
-  opt :coins,     'Set crypto coins', default: CTFC::CONFIG::COINS
-  opt :no_save,   "Do not save '.csv' output"
-  opt :no_print,  'Do not print terminal output'
-  opt :loop,      'Run script N times',           default: 1, type: :integer
-  opt :wait,      'Wait N seconds between loop',  default: 0, type: :integer
+  opt :coins,     'Set crypto coins',                 default: COINS
+  opt :save,      "Save prices in '.csv' table",      default: false
+  opt :export,    "Export all data in '.json' file",  default: false
+  opt :no_print,  'Do not print terminal output',     default: false
+  opt :source,    'Set source to extract data',       default: 'cryptocompare'
+  opt :loop,      'Run script N times',               default: 1, type: :integer
+  opt :wait,      'Wait N seconds between loop',      default: 0, type: :integer
 end
 
-coins = opts[:coins]
-save  = opts[:no_save]  ? false : true
-print = opts[:no_print] ? false : true
-
-@crypto = Ctfc.new
+coins  = opts[:coins]
+source = opts[:source]
+save   = opts[:save]
+export = opts[:export]
+print  = true unless opts[:no_print]
 
 if ARGV.empty?
-
-  # default behavior without arguments - change to suit your needs
-  @crypto.get(:eur, save: false, print: true, coins: coins)
-
+  prices = Crypto.to :usd, coins, source.to_sym, save: save, export: export
+  Cli.print_output :USD, prices if print
 else
-
   opts[:loop].times do
     ARGV.each do |fiat|
       next if opts.include?(fiat.downcase)
-      # in Ruby 3.1: @crypto.get(fiat, save:, print:, coins:)
-      @crypto.get(fiat,
-                  save: save,
-                  print: print,
-                  coins: coins)
-      sleep 1 # wait between requests
+
+      prices = Crypto.to fiat, coins, source.to_sym, save: save, export: export
+      next unless print
+
+      system 'clear' or system 'cls'
+      Cli.print_output fiat, prices
     end
 
-    # end if no `--loop` arg
     next unless opts[:loop] > 1
 
-    # pause between loops
     sleep opts[:wait]
-
-    # clear screan - depending on OS
-    system 'clear' or system 'cls'
   end
 end

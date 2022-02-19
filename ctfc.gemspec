@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 require_relative './lib/ctfc/version'
+require_relative './lib/ctfc/helpers/list'
 
 Gem::Specification.new do |s|
   s.name        = 'ctfc'
   s.version     = CTFC::VERSION
-  s.summary     = 'Cryptocurrency to Fiat values, get data and save prices.'
+  s.summary     = 'Cryptocurrency data gathering gem. Scrap and save as CSV and/or JSON.'
   s.description = <<~DESCRIPTION
-    Convert any cryptocurrency to any fiat value, export data to csv table.
-    Print colorized terminal output.
+    Cryptocurrency data gathering gem. Get data from multiple APIs, print and
+    save output as you wish. Run script from terminal, or use in another app.
+    Class-template based, easy to extend to add more sources. MIT License.
   DESCRIPTION
 
   s.license = 'MIT'
@@ -27,24 +29,29 @@ Gem::Specification.new do |s|
   s.metadata['license_uri'] = 'https://github.com/alx3dev/ctfc/LICENSE'
   s.metadata['rubygems_mfa_required'] = 'true'
 
-  s.files = %w[ bin/ctfc
-                bin/console
-                lib/ctfc.rb
+  s.files = %w[ lib/ctfc.rb
+                lib/ctfc/client.rb
+                lib/ctfc/export.rb
                 lib/ctfc/version.rb
-                lib/ctfc/base.rb
-                lib/ctfc/config.rb
+                lib/ctfc/api.rb
+                lib/ctfc/api/apitemplate.rb
                 LICENSE
                 README.md
                 ctfc.gemspec]
 
-  s.required_ruby_version = '>= 2.6', '< 4'
+  # auto-add sources in api dir
+  List.source_files.select do |source|
+    file = "lib/ctfc/api/#{source}"
+    s.files += [file]
+  end
 
-  s.add_runtime_dependency 'kolorit', '~> 0.1.3'
+  s.required_ruby_version = '> 2.7', '< 3.2'
+
+  s.add_runtime_dependency 'kolorit', '~> 0.2'
   s.add_runtime_dependency 'optimist', '~> 3.0.1'
   s.add_runtime_dependency 'rest-client', '~> 2.1.0'
 
-  s.add_development_dependency 'bundler', '~> 2.2.9'
-  s.add_development_dependency 'pry', '~> 0.14.1'
-  s.add_development_dependency 'rake', '~> 13.0.3'
-  s.add_development_dependency 'rspec', '~> 3.10.0'
+  s.add_development_dependency 'bundler', '~> 2.3'
+  s.add_development_dependency 'pry', '~> 0.14'
+  s.add_development_dependency 'rake', '~> 13.0'
 end

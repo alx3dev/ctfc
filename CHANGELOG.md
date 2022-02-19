@@ -1,34 +1,24 @@
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+## [1.0.0-dev]
 
-## [Unreleased]
+Testing changes before merge.
 
- - Prepare `version-0.4.1` to be ready for Open Source under MIT license.
- - Removed gem `colorize` because of GPLv2.
- - Override String class with color codes for Linux.
+**About:**
 
-## [0.4.0] - 2022-01-24
+ - Allow multiple sources
+ - Class-Template based - easy to add more APIs
+ - New sources are automatically required and added to `.gemspec`
+ - Each source can be required alone
+ - List helper - list available sources (required in gem)
+ - Cli helper - print colorized output (required only in executable)
+ - Save prices in `.csv` table
+ - Extract all data in `.json` file
 
- - Add options `--loop` and `--wait` for terminal scripting
- - Only signed and verified commits from `v-0.4.0`
- - PGP Public key available at https://www.github.com/alx3dev/contact
- - Before `v-0.4.0` unverified commits were pushed.
- - From now on, only VERIFIED signed commits should be trusted
+**Security:**
 
------BEGIN PGP SIGNATURE-----
+ - `CTFC::Client` use `eval` - to call source class to extract data. Only source name is dinamic, and we check for persistence of source class before evaluation. There's no place for malicious use.
 
-iQIzBAEBCgAdFiEEtl+v9iZj5AyyvRYdTFhE2vUGMucFAmHvxM0ACgkQTFhE2vUG
-MuejCQ//Uw+xaFBNrat3evChlifrxAckEqhtQeUwiuluSkReYmV+TqdSNqhzzezh
-BJkgp5d7/Lzt/7wCwK9aVuvejKG0op4Ernk1jRH7jdOkH7TeqVyRe8837XXbn8Q3
-FRh5ih/dbbeQtvIVuI1Z7unRQGvlfMnBKK65wQfHRffJg3kTgO4ICx0Gz1LgxfCa
-OwjSYp2+pXQtGOI+ab9/a7avBb6TIW5uQjegZ5LsVR/at3RySki8v1fOA0Tfmsgv
-pZ4aKhZkpVhZ2l6fj181hBwBspmJPxpB8v4mZXhXAfe9z/425favlfyKLxRvmFu5
-aQK6hZ/gTEXz2s0ypVVPtwQS5FK3YurhKeun6Vto1lQJM10MngwB53B18eNSAB3h
-tsFks8QojwtPH2nttksWOKy5V5tQdBB0uCd72DdEwnAOo1jyMhG7Otkpt4ch5CAd
-xRhmrC0Pp1GgqH2avpeezA3uQZ2HW2Gp1nFnKHeRhPutEBF8x8NLjCxbS3GExrgk
-+Lijy13Eu/y4f2S7TIfN/LMB+ruqQrZe+NmzE8J1tuMcaDqIYsV17c5FXvaxGS/q
-9mJ++v6xHfMykvCNR/FtuUxq+TaD/aNBm+pKYhjqzr4jmoAy2h1gvQEIl4OMXxlf
-5xzgdP6ePWkdwWnYvMtrIbkVWfKvfaBUgYsT/+FRVDierWq2aj0=
-=/ZSG
------END PGP SIGNATURE-----
+ - Example of eval use in CTFC - call source class to extract data:
 
+```ruby
+eval "CTFC::API::#{source_class} if List.sources.include? source_class"
+```
